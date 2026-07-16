@@ -6,90 +6,105 @@
 		<title>JB Design | 프리미엄 인테리어 & 공간 기획</title>
 		<style>
 			 /* 기존 스타일을 그대로 유지합니다 */
-			 * { box-sizing: border-box; margin: 0; padding: 0; }
-			 body { font-family: 'Helvetica Neue', 'Noto Sans KR', sans-serif; color: #111; background: #fff; }
-			 a { text-decoration: none; color: inherit; }
-			 .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; border-bottom: 1px solid #eaeaea; position: sticky; top: 0; background: rgba(255,255,255,0.95); z-index: 100; }
-			 .logo { display: flex; align-items: center; font-size: 26px; font-weight: 900; letter-spacing: 1.5px; }
-			 .logo-img { height: 35px; margin-right: 12px; object-fit: contain; }
-			 .nav-links { display: flex; gap: 35px; font-size: 15px; font-weight: 600; align-items: center; }
-			 .login-btn { padding: 8px 16px; background: #111; color: #fff !important; border-radius: 4px; transition: background 0.3s; }
+			* { box-sizing: border-box; margin: 0; padding: 0; }
+			body { font-family: 'Helvetica Neue', 'Noto Sans KR', sans-serif; color: #111; background: #fff; }
+			a { text-decoration: none; color: inherit; }
+			.navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; border-bottom: 1px solid #eaeaea; position: sticky; top: 0; background: rgba(255,255,255,0.95); z-index: 999; }
+			.logo { display: flex; align-items: center; font-size: 26px; font-weight: 900; letter-spacing: 1.5px; }
+			.logo-img { height: 35px; margin-right: 12px; object-fit: contain; }
+			.nav-links { display: flex; gap: 35px; font-size: 15px; font-weight: 600; align-items: center; }
+			.login-btn { padding: 8px 16px; background: #111; color: #fff !important; border-radius: 4px; transition: background 0.3s; }
 
-			 /* 추가된 모달 스타일 */
-			 .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 1000; justify-content: center; align-items: center; }
-			 .modal-content { background: #fff; padding: 40px; border-radius: 8px; width: 100%; max-width: 400px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-			 .modal-close { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #999; }
-			 .input-group { margin-bottom: 20px; }
-			 .input-group input, .input-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; }
-			 .submit-btn { width: 100%; padding: 14px; background: #111; color: #fff; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; transition: background 0.3s; }
-			 .submit-btn:hover { background: #333; }
+			/* 추가된 모달 스타일 */
+			.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 1000; justify-content: center; align-items: center; }
+			.modal-content { background: #fff; padding: 40px; border-radius: 8px; width: 100%; max-width: 400px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+			.modal-close { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #999; }
+			.input-group { margin-bottom: 20px; }
+			.input-group input, .input-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; }
+			.submit-btn { width: 100%; padding: 14px; background: #111; color: #fff; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; transition: background 0.3s; }
+			.submit-btn:hover { background: #333; }
 
-			 /* 회원가입 전환 버튼 스타일 */
-			 #goToSignupBtn { background: #666; }
-			 #goToSignupBtn:hover { background: #333; }
+			/* 회원가입 전환 버튼 스타일 */
+			#goToSignupBtn { background: #666; }
+			#goToSignupBtn:hover { background: #333; }
 
-			/* 상단 네비게이션 바 */
-					.navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; border-bottom: 1px solid #eaeaea; position: sticky; top: 0; background: rgba(255,255,255,0.95); z-index: 100; }
-					.logo { display: flex; align-items: center; font-size: 26px; font-weight: 900; letter-spacing: 1.5px; }
-			 .logo-img { height: 35px; margin-right: 12px; object-fit: contain; }
-					.nav-links { display: flex; gap: 35px; font-size: 15px; font-weight: 600; align-items: center; }
-					.nav-links a:hover { color: #666; transition: color 0.3s; }
+			/* 상단 네비게이션 ��� */
+			.nav-links a:hover { color: #666; transition: color 0.3s; }
 
-					/* 메인 히어로 섹션 (Ulanzi 스타일의 대형 배너) */
-					.hero { position: relative; width: 100%; height: 75vh; background: #111 url('메인화면_대표사진.jpg') no-repeat center center/cover; display: flex; align-items: center; padding: 0 10%; color: #fff; }
-					.hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 1; }
-					.hero-content { position: relative; z-index: 2; max-width: 650px; }
-					.hero-content h1 { font-size: 52px; line-height: 1.25; margin-bottom: 20px; font-weight: 800; }
-					.hero-content p { font-size: 18px; margin-bottom: 35px; opacity: 0.9; line-height: 1.6; }
-					.btn { padding: 15px 30px; background: #fff; color: #111; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; display: inline-block; transition: background 0.3s; }
-					.btn:hover { background: #eee; }
+			/* 메인 히어로 섹션 */
+			.hero { position: relative; width: 100%; height: 75vh; background: #111 url('메인화면_대표사진.jpg') no-repeat center center/cover; display: flex; align-items: center; padding: 0 10%; color: #fff; }
+			.hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 1; }
+			.hero-content { position: relative; z-index: 2; max-width: 650px; }
+			.hero-content h1 { font-size: 52px; line-height: 1.25; margin-bottom: 20px; font-weight: 800; }
+			.hero-content p { font-size: 18px; margin-bottom: 35px; opacity: 0.9; line-height: 1.6; }
+			.btn { padding: 15px 30px; background: #fff; color: #111; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; display: inline-block; transition: background 0.3s; }
+			.btn:hover { background: #eee; }
 
-					/* 신뢰도/지표 섹션 */
-					.stats { display: flex; justify-content: space-evenly; padding: 60px 20px; background: #fafafa; text-align: center; border-bottom: 1px solid #eaeaea; }
-					.stat-item h3 { font-size: 36px; font-weight: 800; margin-bottom: 8px; color: #111; }
-					.stat-item p { font-size: 15px; color: #555; font-weight: 500; }
+			/* 신뢰도/지표 섹션 */
+			.stats { display: flex; justify-content: space-evenly; padding: 60px 20px; background: #fafafa; text-align: center; border-bottom: 1px solid #eaeaea; }
+			.stat-item h3 { font-size: 36px; font-weight: 800; margin-bottom: 8px; color: #111; }
+			.stat-item p { font-size: 15px; color: #555; font-weight: 500; }
 
-					/* 포트폴리오 그리드 섹션 (Ulanzi 제품 리스트 스타일 적용) */
-					.portfolio-section { padding: 80px 50px; max-width: 1400px; margin: 0 auto; }
-					.section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; flex-wrap: wrap; gap: 20px; }
-					.section-title { font-size: 32px; font-weight: 800; }
-					.tabs { display: flex; gap: 10px; }
-					.tabs button { padding: 10px 20px; border: 1px solid #ddd; background: #fff; border-radius: 30px; cursor: pointer; font-size: 15px; font-weight: 600; transition: all 0.3s ease; }
-					.tabs button.active, .tabs button:hover { background: #111; color: #fff; border-color: #111; }
+			/* 포트폴리오 그리드 섹션 */
+			.portfolio-section { padding: 80px 50px; max-width: 1400px; margin: 0 auto; }
+			.section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; flex-wrap: wrap; gap: 20px; }
+			.section-title { font-size: 32px; font-weight: 800; }
+			.tabs { display: flex; gap: 10px; }
+			.tabs button { padding: 10px 20px; border: 1px solid #ddd; background: #fff; border-radius: 30px; cursor: pointer; font-size: 15px; font-weight: 600; transition: all 0.3s ease; }
+			.tabs button.active, .tabs button:hover { background: #111; color: #fff; border-color: #111; }
 
-					.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 40px; }
-					.card { cursor: pointer; transition: transform 0.3s ease; }
-					.card:hover { transform: translateY(-8px); }
-					.card-img { width: 100%; height: 280px; background-color: #e0e0e0; border-radius: 8px; margin-bottom: 18px; object-fit: cover; }
-					.card-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; color: #111; }
-					.card-desc { font-size: 15px; color: #666; line-height: 1.4; }
+			.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 40px; }
+			.card { cursor: pointer; transition: transform 0.3s ease; }
+			.card:hover { transform: translateY(-8px); }
+			.card-img { width: 100%; height: 280px; background-color: #e0e0e0; border-radius: 8px; margin-bottom: 18px; object-fit: cover; }
+			.card-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; color: #111; }
+			.card-desc { font-size: 15px; color: #666; line-height: 1.4; }
 
-					/* 푸터 (하단 정보) */
-					.footer { background: #111; color: #fff; padding: 70px 50px 30px; font-size: 14px; }
-					.footer-cols { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; margin-bottom: 50px; max-width: 1400px; margin-left: auto; margin-right: auto; }
-					.footer-col { flex: 1; min-width: 220px; }
-					.footer-col h4 { margin-bottom: 20px; font-size: 18px; font-weight: 700; }
-					.footer-col p, .footer-col a { color: #aaa; margin-bottom: 12px; display: block; line-height: 1.6; transition: color 0.3s; }
-					.footer-col a:hover { color: #fff; }
-					.footer-bottom { text-align: center; color: #666; border-top: 1px solid #333; padding-top: 25px; margin-top: 20px; }
+			/* 푸터 (하단 정보) */
+			.footer { background: #111; color: #fff; padding: 70px 50px 30px; font-size: 14px; }
+			.footer-cols { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; margin-bottom: 50px; max-width: 1400px; margin-left: auto; margin-right: auto; }
+			.footer-col { flex: 1; min-width: 220px; }
+			.footer-col h4 { margin-bottom: 20px; font-size: 18px; font-weight: 700; }
+			.footer-col p, .footer-col a { color: #aaa; margin-bottom: 12px; display: block; line-height: 1.6; transition: color 0.3s; }
+			.footer-col a:hover { color: #fff; }
+			.footer-bottom { text-align: center; color: #666; border-top: 1px solid #333; padding-top: 25px; margin-top: 20px; }
 
-					/* 모바일 대응 */
-					@media (max-width: 768px) {
-					    .navbar { padding: 15px 20px; flex-direction: column; gap: 15px; }
-					    .hero-content h1 { font-size: 36px; }
-					    .stats { flex-direction: column; gap: 30px; }
-					    .portfolio-section { padding: 50px 20px; }
-					}
+			/* 모바일 대응 */
+			@media (max-width: 768px) {
+			    .navbar { padding: 15px 20px; flex-direction: column; gap: 15px; }
+			    .hero-content h1 { font-size: 36px; }
+			    .stats { flex-direction: column; gap: 30px; }
+			    .portfolio-section { padding: 50px 20px; }
+			}
+
+			/* --- 유지보수 알림 모달 스타일 --- */
+			#maintainModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; }
+			#maintainModal .maintain-box { background: #fff; padding: 32px; border-radius: 10px; width: 90%; max-width: 480px; text-align: center; box-shadow: 0 12px 30px rgba(0,0,0,0.25); }
+			#maintainModal h2 { font-size: 22px; margin-bottom: 12px; color: #111; }
+			#maintainModal p { color: #666; margin-bottom: 22px; line-height: 1.6; }
+			#maintainModal .home-btn { display: inline-block; padding: 12px 20px; background: #111; color: #fff; border-radius: 6px; font-weight: 700; cursor: pointer; }
+			#maintainModal .close-small { display: inline-block; margin-top: 12px; color: #888; cursor: pointer; font-size: 14px; }
 		</style>
 	</head>
 	<body>
+		<!-- 유지보수 안내 모달 (페이지 로드 시 표시) -->
+		<div id="maintainModal">
+			<div class="maintain-box">
+				<h2>현재 사이트 개편중입니다.</h2>
+				<p>불편을 드려 죄송합니다. 잠시 후 다시 방문해 주시거나 아래 버튼을 눌러 홈으로 이동하세요.</p>
+				<button id="goHomeBtn" class="home-btn">홈으로 돌아가기</button>
+				<div class="close-small" id="dismissMaintain">알림 닫기</div>
+			</div>
+		</div>
+
 		<!-- 기존과 동일한 상단 메뉴 -->
 		<nav class="navbar">
 			<div class="logo">
 				<img
 					src="https://drive.google.com/thumbnail?id=1-qDwfz9rv8F7Hdq9pANFwhZNbfRLVvPR&sz=w1000"
 					class="logo-img"
-				/>JB DESIGN
+				/>
+				JB DESIGN
 			</div>
 			<div class="nav-links">
 				<a href="#">About</a>
@@ -120,7 +135,7 @@
 							회원이 아니신가요?
 						</p>
 						<button type="button" class="submit-btn" id="goToSignupBtn" 
-								style="background: #666;">회원가입 하기</button>
+							style="background: #666;">회원가입 하기</button>
 					</div>
 				</form>
 			</div>
@@ -179,15 +194,15 @@
 			<div class="stat-item">
 				<h3>Smart Health Simple Life</h3>
 				<p>건강하게 그리고 편리하게</p>
-			</div>
+				</div>
 			<div class="stat-item">
 				<h3>Premium</h3>
 				<p>하이엔드 자재 및 마감 적용</p>
-			</div>
+				</div>
 			<div class="stat-item">
 				<h3>Smart Layout</h3>
 				<p>효율적인 동선 및 3D 렌더링 컨설팅</p>
-			</div>
+				</div>
 		</div>
 
 		<div class="portfolio-section">
@@ -287,6 +302,34 @@
 
 			const loginModal = document.getElementById('loginModal');
 			const signupModal = document.getElementById('signupModal');
+
+			// 유지보수 모달 요소
+			const maintainModal = document.getElementById('maintainModal');
+			const goHomeBtn = document.getElementById('goHomeBtn');
+			const dismissMaintain = document.getElementById('dismissMaintain');
+
+			// 페이지 로드 시 유지보수 알림 표시
+			document.addEventListener('DOMContentLoaded', () => {
+				// show the maintenance modal
+				if (maintainModal) {
+					maintainModal.style.display = 'flex';
+				}
+			});
+
+			// 홈으로 돌아가기 버튼 클릭
+			if (goHomeBtn) {
+				goHomeBtn.addEventListener('click', () => {
+					// 홈으로 이동 (원하시면 "/" 로 변경 가능)
+					window.location.href = 'index.html';
+				});
+			}
+
+			// 유지보수 알림 닫기 (임시로 사이트 계속 보기 원할 때)
+			if (dismissMaintain) {
+				dismissMaintain.addEventListener('click', () => {
+					if (maintainModal) maintainModal.style.display = 'none';
+				});
+			}
 
 			// 로그인 모달 열기/닫기
 			document.getElementById('openLoginBtn').addEventListener('click', (e) => { 
