@@ -28,7 +28,7 @@
 			#goToSignupBtn { background: #666; }
 			#goToSignupBtn:hover { background: #333; }
 
-			/* 상단 네비게이션 ��� */
+			/* 상단 네비게이션 */
 			.nav-links a:hover { color: #666; transition: color 0.3s; }
 
 			/* 메인 히어로 섹션 */
@@ -83,7 +83,6 @@
 			#maintainModal h2 { font-size: 22px; margin-bottom: 12px; color: #111; }
 			#maintainModal p { color: #666; margin-bottom: 22px; line-height: 1.6; }
 			#maintainModal .home-btn { display: inline-block; padding: 12px 20px; background: #111; color: #fff; border-radius: 6px; font-weight: 700; cursor: pointer; }
-			#maintainModal .close-small { display: inline-block; margin-top: 12px; color: #888; cursor: pointer; font-size: 14px; }
 		</style>
 	</head>
 	<body>
@@ -93,7 +92,6 @@
 				<h2>현재 사이트 개편중입니다.</h2>
 				<p>불편을 드려 죄송합니다. 잠시 후 다시 방문해 주시거나 아래 버튼을 눌러 홈으로 이동하세요.</p>
 				<button id="goHomeBtn" class="home-btn">홈으로 돌아가기</button>
-				<div class="close-small" id="dismissMaintain">알림 닫기</div>
 			</div>
 		</div>
 
@@ -306,7 +304,6 @@
 			// 유지보수 모달 요소
 			const maintainModal = document.getElementById('maintainModal');
 			const goHomeBtn = document.getElementById('goHomeBtn');
-			const dismissMaintain = document.getElementById('dismissMaintain');
 
 			// 페이지 로드 시 유지보수 알림 표시
 			document.addEventListener('DOMContentLoaded', () => {
@@ -316,18 +313,20 @@
 				}
 			});
 
-			// 홈으로 돌아가기 버튼 클릭
+			// 홈으로 돌아가기 버튼 클릭: 먼저 창을 닫기 시도하고 실패하면 Google로 이동
 			if (goHomeBtn) {
 				goHomeBtn.addEventListener('click', () => {
-					// 홈으로 이동 (원하시면 "/" 로 변경 가능)
-					window.location.href = 'index.html';
-				});
-			}
-
-			// 유지보수 알림 닫기 (임시로 사이트 계속 보기 원할 때)
-			if (dismissMaintain) {
-				dismissMaintain.addEventListener('click', () => {
-					if (maintainModal) maintainModal.style.display = 'none';
+					try {
+						// 먼저 현재 창을 닫아본다 (팝업으로 열렸을 때 동작)
+						window.open('','_self');
+						window.close();
+						// 300ms 후에도 닫히지 않았다면 안전하게 외부 홈으로 이동
+						setTimeout(() => {
+							window.location.href = 'https://www.google.com';
+						}, 300);
+					} catch (e) {
+						window.location.href = 'https://www.google.com';
+					}
 				});
 			}
 
