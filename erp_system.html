@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JB Design | ERP System</title>
+    <style>
+        /* 기본 스타일 초기화 */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Helvetica Neue', 'Noto Sans KR', sans-serif; color: #333; background: #f4f6f9; display: flex; height: 100vh; overflow: hidden; }
+        a { text-decoration: none; color: inherit; }
+
+        /* 사이드바 스타일 */
+        .sidebar { width: 260px; background: #111; color: #fff; display: flex; flex-direction: column; justify-content: space-between; padding: 30px 20px; z-index: 10; }
+        .sidebar-top .logo { font-size: 22px; font-weight: 900; letter-spacing: 1.5px; margin-bottom: 40px; text-align: center; color: #fff; border-bottom: 1px solid #222; padding-bottom: 20px; }
+        .menu-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+        .menu-item { padding: 14px 18px; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: 600; color: #aaa; transition: all 0.3s; display: flex; align-items: center; gap: 12px; }
+        .menu-item:hover, .menu-item.active { background: #222; color: #fff; }
+        .sidebar-bottom { border-top: 1px solid #222; padding-top: 20px; text-align: center; }
+        .logout-btn { font-size: 14px; color: #ff5e5e; font-weight: 600; cursor: pointer; }
+
+        /* 메인 레이아웃 */
+        .main-container { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+        
+        /* 상단 헤더 */
+        .header { background: #fff; height: 70px; border-bottom: 1px solid #eaeaea; display: flex; justify-content: space-between; align-items: center; padding: 0 40px; }
+        .header-title h2 { font-size: 20px; font-weight: 700; }
+        .user-profile { display: flex; align-items: center; gap: 15px; }
+        .user-avatar { width: 36px; height: 36px; background: #ddd; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; color: #444; }
+        .user-info { font-size: 14px; font-weight: 600; }
+        .user-info span { font-size: 12px; color: #888; display: block; font-weight: 400; }
+
+        /* 본문 영역 */
+        .content-body { flex: 1; padding: 40px; overflow-y: auto; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* 대시보드 스탯 카드 그리드 */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 25px; margin-bottom: 35px; }
+        .stat-card { background: #fff; padding: 25px; border-radius: 8px; border: 1px solid #eaeaea; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .stat-card .card-label { font-size: 13px; color: #888; font-weight: 600; margin-bottom: 10px; text-transform: uppercase; }
+        .stat-card .card-value { font-size: 28px; font-weight: 800; color: #111; margin-bottom: 5px; }
+        .stat-card .card-sub { font-size: 12px; color: #2ecc71; font-weight: 500; }
+        .stat-card .card-sub.warning { color: #f39c12; }
+
+        /* 대시보드 하단 레이아웃 (2열 분할) */
+        .dashboard-row { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; margin-bottom: 35px; }
+        @media (max-width: 1024px) { .dashboard-row { grid-template-columns: 1fr; } }
+
+        /* 섹션 컨테이너 박스 */
+        .section-box { background: #fff; padding: 30px; border-radius: 8px; border: 1px solid #eaeaea; box-shadow: 0 2px 5px rgba(0,0,0,0.02); margin-bottom: 25px; }
+        .section-box h3 { font-size: 18px; font-weight: 800; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        
+        /* 테이블 스타일 */
+        .data-table-wrapper { overflow-x: auto; }
+        .data-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+        .data-table th { background: #fafafa; padding: 14px 16px; font-weight: 700; color: #555; border-bottom: 2px solid #eaeaea; }
+        .data-table td { padding: 16px; border-bottom: 1px solid #eaeaea; color: #444; vertical-align: middle; }
+        .data-table tr:hover { background: #fafafa; }
+
+        /* 상태 배지 */
+        .badge { padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600; display: inline-block; }
+        .badge.process { background: #e3f2fd; color: #0d47a1; } /* 진행중 */
+        .badge.pending { background: #fff3e0; color: #e65100; } /* 대기중/소방인허가 */
+        .badge.complete { background: #e8f5e9; color: #1b5e20; } /* 완료 */
+        .badge.partner-type { background: #f4f4f4; color: #333; }
+
+        /* 진척률 바 */
+        .progress-container { display: flex; align-items: center; gap: 10px; width: 120px; }
+        .progress-bar { background: #eee; border-radius: 10px; height: 6px; flex: 1; overflow: hidden; }
+        .progress-fill { background: #111; height: 100%; border-radius: 10px; }
+        .progress-text { font-size: 12px; font-weight: 600; color: #666; width: 30px; text-align: right; }
+
+        /* 액션 버튼 */
+        .action-btn { padding: 6px 12px; border: 1px solid #ddd; background: #fff; border-radius: 4px; font-size: 12px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+        .action-btn.approve { background: #111; color: #fff; border-color: #111; margin-right: 5px; }
+        .action-btn.approve:hover { background: #333; }
+        .action-btn.reject:hover { background: #f5f5f5; color: #ff5e5e; }
+
+        /* 체크리스트/일정 스타일 */
+        .todo-list { list-style: none; display: flex; flex-direction: column; gap: 15px; }
+        .todo-item { display: flex; align-items: flex-start; gap: 12px; font-size: 14px; line-height: 1.4; }
+        .todo-item input[type="checkbox"] { margin-top: 3px; transform: scale(1.1); cursor: pointer; }
+        .todo-item .todo-time { font-size: 11px; color: #999; display: block; margin-top: 2px; }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-top">
+            <div class="logo">JB DESIGN ERP</div>
+            <ul class="menu-list">
+                <li class="menu-item active" data-tab="dashboard-tab">종합 대시보드</li>
+                <li class="menu-item" data-tab="projects-tab">현장 및 공정 관리</li>
+                <li class="menu-item" data-tab="partners-tab">협력업체 견적 검토</li>
+                <li class="menu-item" data-tab="finances-tab">자재 및 재무 관리</li>
+            </ul>
+        </div>
+        <div class="sidebar-bottom">
+            <div class="logout-btn" onclick="location.href='index.html'">시스템 로그아웃</div>
+        </div>
+    </aside>
+
+    <div class="main-container">
+        
+        <header class="header">
+            <div class="header-title">
+                <h2 id="page-title">종합 대시보드</h2>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">김</div>
+                <div class="user-info">
+                    김지범 팀장
+                    <span>설계 및 시공 총괄팀</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="content-body">
+
+            <div id="dashboard-tab" class="tab-content active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="card-label">진행 중인 프로젝트</div>
+                        <div class="card-value">142 현장</div>
+                        <div class="card-sub">이번 달 +3개 신규 핏아웃</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="card-label">당월 매칭 협력업체</div>
+                        <div class="card-value">28 개사</div>
+                        <div class="card-sub">소방/전기/인허가 파트너군</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="card-label">소방 승인 대기 (QCVN)</div>
+                        <div class="card-value">5 건</div>
+                        <div class="card-sub warning">하노이/호치민 소방 인허가 대기</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="card-label">당월 누적 매출 현황</div>
+                        <div class="card-value">₩ 428.5M</div>
+                        <div class="card-sub">목표 대비 112% 달성 중</div>
+                    </div>
+                </div>
+
+                <div class="dashboard-row">
+                    <div class="section-box">
+                        <h3>최근 공정 업데이트 현황</h3>
+                        <div class="data-table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>프로젝트명</th>
+                                        <th>구분</th>
+                                        <th>공정 단계</th>
+                                        <th>진척률</th>
+                                        <th>상태</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Pearl Tower 16F 워크스페이스</strong></td>
+                                        <td>오피스</td>
+                                        <td>EI60 방화도어 시공</td>
+                                        <td>
+                                            <div class="progress-container">
+                                                <div class="progress-bar"><div class="progress-fill" style="width: 85%;"></div></div>
+                                                <div class="progress-text">85%</div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge process">진행중</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>WJ Food 베트남 법인 본사</strong></td>
+                                        <td>오피스</td>
+                                        <td>네트워크 인프라 입선</td>
+                                        <td>
+                                            <div class="progress-container">
+                                                <div class="progress-bar"><div class="progress-fill" style="width: 40%;"></div></div>
+                                                <div class="progress-text">40%</div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge process">진행중</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Lumière Midtown 레지던스</strong></td>
+                                        <td>주거</td>
+                                        <td>가구 현장 조립 및 마감</td>
+                                        <td>
+                                            <div class="progress-container">
+                                                <div class="progress-bar"><div class="progress-fill" style="width: 95%;"></div></div>
+                                                <div class="progress-text">95%</div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge process">마감검수</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="section-box">
+                        <h3>오늘의 현장 중요 일정</h3>
+                        <ul class="todo-list">
+                            <li class="todo-item">
+                                <input type="checkbox" id="t1">
+                                <label for="t1">
+                                    Pearl Tower 소방 현장 중간 검사 대응
+                                    <span class="todo-time">오전 10:00 · 호치민 소방국 서류 대조</span>
+                                </label>
+                            </li>
+                            <li class="todo-item">
+                                <input type="checkbox" id="t2">
+                                <label for="t2">
+                                    WJ Food 스마트 조명 스펙 최종 컨펌
+                                    <span class="todo-time">오후 02:00 · 클라이언트 미팅</span>
+                                </label>
+                            </li>
+                            <li class="todo-item">
+                                <input type="checkbox" id="t3">
+                                <label for="t3">
+                                    하노이 콤팩트 오피스 자재 발주 승인
+                                    <span class="todo-time">오후 05:00 · ERP 재무 승인 건</span>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="projects-tab" class="tab-content">
+                <div class="section-box">
+                    <h3>전체 현장 마스터 공정표</h3>
+                    <div class="data-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>현장 코드</th>
+                                    <th>프로젝트명</th>
+                                    <th>지역</th>
+                                    <th>담당 PM</th>
+                                    <th>현재 세부공정</th>
+                                    <th>소방 규정 검토(QCVN)</th>
+                                    <th>진척률</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>JB-2026-01</td>
+                                    <td><strong>Pearl Tower 16F 워크스페이스</strong></td>
+                                    <td>호치민</td>
+                                    <td>박준형 차장</td>
+                                    <td>방화구획 마감공사</td>
+                                    <td><span class="badge complete">승인완료</span></td>
+                                    <td>
+                                        <div class="progress-container">
+                                            <div class="progress-bar"><div class="progress-fill" style="width: 85%;"></div></div>
+                                            <div class="progress-text">85%</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>JB-2026-02</td>
+                                    <td><strong>WJ Food 베트남 법인 오피스</strong></td>
+                                    <td>호치민</td>
+                                    <td>이성민 과장</td>
+                                    <td>통신/전력 배선 작업</td>
+                                    <td><span class="badge pending">심사중</span></td>
+                                    <td>
+                                        <div class="progress-container">
+                                            <div class="progress-bar"><div class="progress-fill" style="width: 40%;"></div></div>
+                                            <div class="progress-text">40%</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>JB-2026-03</td>
+                                    <td><strong>Lumière Midtown 레지던스</strong></td>
+                                    <td>호치민</td>
+                                    <td>정다운 대리</td>
+                                    <td>하이엔드 주방가구 세팅</td>
+                                    <td><span class="badge complete">대상제외</span></td>
+                                    <td>
+                                        <div class="progress-container">
+                                            <div class="progress-bar"><div class="progress-fill" style="width: 95%;"></div></div>
+                                            <div class="progress-text">95%</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>JB-2026-04</td>
+                                    <td><strong>하노이 77㎡ 콤팩트 오피스</strong></td>
+                                    <td>하노이</td>
+                                    <td>최두현 과장</td>
+                                    <td>3D 레이아웃 최종 확정 단계</td>
+                                    <td><span class="badge pending">서류접수</span></td>
+                                    <td>
+                                        <div class="progress-container">
+                                            <div class="progress-bar"><div class="progress-fill" style="width: 15%;"></div></div>
+                                            <div class="progress-text">15%</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="partners-tab" class="tab-content">
+                <div class="section-box">
+                    <h3>외부 협력업체 투찰 및 견적 접수 현황</h3>
+                    <p style="color: #666; font-size: 13px; margin-bottom: 20px;">* 협력업체 전용 시스템 창에서 접수한 비교 견적서 내역입니다. 단가 및 시공 이력을 검토 후 승인하십시오.</p>
+                    <div class="data-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>접수번호</th>
+                                    <th>업체명</th>
+                                    <th>공종 구분</th>
+                                    <th>관련 프로젝트</th>
+                                    <th>제출 견적 금액</th>
+                                    <th>첨부 서류</th>
+                                    <th>결재 관리</th>
+                                </tr>
+                            </thead>
+                            <tbody id="partner-quote-body">
+                                <tr>
+                                    <td>Q-2026-089</td>
+                                    <td><strong>(주)비나 일렉트릭</strong></td>
+                                    <td><span class="badge partner-type">전기·배선</span></td>
+                                    <td>WJ Food 베트남 법인 오피스</td>
+                                    <td>₩ 18,500,000</td>
+                                    <td><a href="#" style="color:#0d47a1; text-decoration: underline;">내역서_v1.pdf</a></td>
+                                    <td>
+                                        <button class="action-btn approve" onclick="processQuote(this, '승인')">승인</button>
+                                        <button class="action-btn reject" onclick="processQuote(this, '반려')">반려</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Q-2026-088</td>
+                                    <td><strong>한성 방화시스템</strong></td>
+                                    <td><span class="badge partner-type">소방설비·창호</span></td>
+                                    <td>Pearl Tower 16F 워크스페이스</td>
+                                    <td>₩ 24,000,000</td>
+                                    <td><a href="#" style="color:#0d47a1; text-decoration: underline;">EI60시험성적서.zip</a></td>
+                                    <td>
+                                        <button class="action-btn approve" onclick="processQuote(this, '승인')">승인</button>
+                                        <button class="action-btn reject" onclick="processQuote(this, '반려')">반려</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Q-2026-087</td>
+                                    <td><strong>메콩 퍼니처</strong></td>
+                                    <td><span class="badge partner-type">맞춤가구·제작</span></td>
+                                    <td>Lumière Midtown 레지던스</td>
+                                    <td>₩ 41,200,000</td>
+                                    <td><a href="#" style="color:#0d47a1; text-decoration: underline;">가구도면_견적서.pdf</a></td>
+                                    <td>
+                                        <button class="action-btn approve" onclick="processQuote(this, '승인')">승인</button>
+                                        <button class="action-btn reject" onclick="processQuote(this, '반려')">반려</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="finances-tab" class="tab-content">
+                <div class="section-box">
+                    <h3>하이엔드 자재 수주 및 거래처 정산 현황</h3>
+                    <div class="data-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>품목명</th>
+                                    <th>거래처</th>
+                                    <th>수량</th>
+                                    <th>단위</th>
+                                    <th>결제 상태</th>
+                                    <th>잔금 정산일</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>이탈리아 수입 포세린 타일 (600x1200)</td>
+                                    <td>Vina Ceramic</td>
+                                    <td>350</td>
+                                    <td>㎡</td>
+                                    <td><span class="badge complete">지급완료</span></td>
+                                    <td>2026-07-01</td>
+                                }
+                                <tr>
+                                    <td>친환경 내부 도장 자재 (벤자민무어)</td>
+                                    <td>도료상사 HANOI</td>
+                                    <td>80</td>
+                                    <td>Can</td>
+                                    <td><span class="badge pending">결제대기</span></td>
+                                    <td>2026-07-20</td>
+                                </tr>
+                                <tr>
+                                    <td>알루미늄 슬림 3연동 중문 프레임</td>
+                                    <td>(주)한도메탈</td>
+                                    <td>12</td>
+                                    <td>Set</td>
+                                    <td><span class="badge complete">지급완료</span></td>
+                                    <td>2026-06-28</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // 1. 사이드바 탭 전환 시스템
+        const menuItems = document.querySelectorAll('.menu-item');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const pageTitle = document.getElementById('page-title');
+
+        menuItems.forEach(item => {
+            item.addEventListener('click', function() {
+                // 기존 활성화 클래스 삭제
+                menuItems.forEach(i => i.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+
+                // 현재 클릭한 메뉴 및 관련 콘텐츠 활성화
+                this.classList.add('active');
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+
+                // 상단 헤더 타이틀 텍스트 실시간 변경
+                pageTitle.textContent = this.textContent;
+            });
+        });
+
+        // 2. 협력업체 견적서 결재 처리 로직 (승인 / 반려)
+        function processQuote(button, action) {
+            const row = button.closest('tr');
+            const quoteNo = row.cells[0].textContent;
+            const partnerName = row.cells[1].textContent;
+            
+            if (action === '승인') {
+                const conf = confirm(`[${quoteNo}] ${partnerName}의 견적을 최종 '승인' 처리하시겠습니까?\n승인 시 원가 보고서 및 실행 예산에 즉시 반영됩니다.`);
+                if (conf) {
+                    row.cells[6].innerHTML = `<span class="badge complete" style="padding: 6px 12px;">결재승인</span>`;
+                    row.style.background = '#f8fff9';
+                }
+            } else if (action === '반려') {
+                const reason = prompt(`[${quoteNo}] ${partnerName}의 견적 반려 사유를 입력하십시오:`);
+                if (reason !== null) {
+                    row.cells[6].innerHTML = `<span class="badge" style="background:#ffebee; color:#c62828; padding: 6px 12px;">최종반려</span>`;
+                    row.style.background = '#fffbfb';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

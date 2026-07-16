@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JB Design | 프로젝트 문의 및 접수</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Helvetica Neue', 'Noto Sans KR', sans-serif; color: #111; background: #fafafa; }
+        a { text-decoration: none; color: inherit; }
+
+        /* 네비게이션 바 */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: #fff; border-bottom: 1px solid #eaeaea; }
+        .logo { font-size: 24px; font-weight: 900; letter-spacing: 1px; }
+        .nav-links { display: flex; gap: 30px; font-size: 15px; font-weight: 600; }
+        .nav-links a:hover { color: #666; }
+
+        /* 헤더 섹션 */
+        .header { background: #111; color: #fff; text-align: center; padding: 60px 20px; }
+        .header h1 { font-size: 36px; font-weight: 800; margin-bottom: 15px; }
+        .header p { font-size: 16px; color: #ccc; }
+
+        /* 컨테이너 및 안내 박스 */
+        .container { max-width: 900px; margin: -30px auto 50px; background: #fff; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; position: relative; z-index: 10; }
+        
+        .benefits-box { background: #f8f9fa; padding: 30px 40px; border-bottom: 1px solid #eaeaea; }
+        .benefits-title { font-size: 18px; font-weight: 800; margin-bottom: 15px; color: #111; display: flex; align-items: center; gap: 10px; }
+        .benefits-title::before { content: '💡'; font-size: 20px; }
+        .benefits-list { display: flex; gap: 20px; font-size: 14px; color: #555; line-height: 1.5; }
+        .benefit-item { flex: 1; background: #fff; padding: 15px; border-radius: 6px; border: 1px solid #ddd; }
+        .benefit-item strong { display: block; color: #111; margin-bottom: 5px; }
+
+        /* 탭 메뉴 */
+        .tabs { display: flex; border-bottom: 2px solid #eaeaea; }
+        .tab-btn { flex: 1; padding: 20px; text-align: center; font-size: 16px; font-weight: 700; background: #fff; border: none; cursor: pointer; color: #888; transition: all 0.3s; }
+        .tab-btn.active { color: #111; border-bottom: 3px solid #111; }
+        .tab-btn:hover { background: #f9f9f9; }
+
+        /* 폼 영역 */
+        .form-section { padding: 40px; display: none; }
+        .form-section.active { display: block; }
+        .form-title { font-size: 22px; font-weight: 800; margin-bottom: 10px; }
+        .form-desc { font-size: 14px; color: #666; margin-bottom: 30px; line-height: 1.6; }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 14px; font-weight: 600; color: #333; margin-bottom: 8px; }
+        .input-group input, .input-group select, .input-group textarea { width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 4px; font-size: 15px; font-family: inherit; }
+        .input-group input:focus, .input-group textarea:focus { border-color: #111; outline: none; }
+        .input-group textarea { resize: vertical; min-height: 120px; }
+
+        .submit-btn { width: 100%; padding: 18px; background: #111; color: #fff; font-size: 16px; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; transition: background 0.3s; margin-top: 10px; }
+        .submit-btn:hover { background: #333; }
+
+        /* 모바일 대응 */
+        @media (max-width: 768px) {
+            .benefits-list { flex-direction: column; gap: 10px; }
+            .container { margin: 0; border-radius: 0; box-shadow: none; }
+            .form-section { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">JB DESIGN</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+        </div>
+    </nav>
+
+    <div class="header">
+        <h1>Start Your Project</h1>
+        <p>JB DESIGN과 함께 귀하만의 특별한 공간을 만들어보세요.</p>
+    </div>
+
+    <div class="container">
+        <!-- 혜택 안내 영역 -->
+        <div class="benefits-box">
+            <div class="benefits-title">왜 회원가입 후 정식 접수를 해야 하나요?</div>
+            <div class="benefits-list">
+                <div class="benefit-item">
+                    <strong>📁 문서 안전 보관</strong>
+                    설계 도면, 3D 렌더링, 계약서 및 투명한 견적서를 시스템에 영구 보관하여 언제든 열람할 수 있습니다.
+                </div>
+                <div class="benefit-item">
+                    <strong>📊 실시간 공정 확인</strong>
+                    현장에 가지 않으셔도 ERP 시스템을 통해 시공 진행 상황과 현장 사진을 매일 확인할 수 있습니다.
+                </div>
+                <div class="benefit-item">
+                    <strong>🛠 확실한 A/S 보장</strong>
+                    준공 이후에도 사용된 하이엔드 자재 리스트와 유지보수 이력이 기록되어 신속한 A/S 처리가 가능합니다.
+                </div>
+            </div>
+        </div>
+
+        <!-- 탭 버튼 -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('memberTab', this)">회원 정식 프로젝트 접수</button>
+            <button class="tab-btn" onclick="switchTab('guestTab', this)">비회원 간편 문의</button>
+        </div>
+
+        <!-- 1. 회원 정식 접수 폼 -->
+        <div id="memberTab" class="form-section active">
+            <h2 class="form-title">회원 정식 접수</h2>
+            <p class="form-desc">기존 가입하신 아이디로 인증 후 프로젝트를 접수합니다. 상세한 내용을 남겨주시면 도면 및 3D 컨설팅이 배정됩니다.</p>
+            
+            <form id="memberOrderForm">
+                <div style="display: flex; gap: 20px;">
+                    <div class="input-group" style="flex: 1;">
+                        <label>회원 아이디</label>
+                        <input type="text" id="m-id" required placeholder="가입하신 아이디 입력">
+                    </div>
+                    <div class="input-group" style="flex: 1;">
+                        <label>비밀번호</label>
+                        <input type="password" id="m-pw" required placeholder="비밀번호 입력">
+                    </div>
+                </div>
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0 30px;">
+
+                <div class="input-group">
+                    <label>의뢰자 성함 / 기업명</label>
+                    <input type="text" id="m-name" required placeholder="예: WJ Food 베트남 법인">
+                </div>
+                <div class="input-group">
+                    <label>연락처</label>
+                    <input type="text" id="m-contact" required placeholder="예: 090-1234-5678">
+                </div>
+                <div class="input-group">
+                    <label>공간 유형</label>
+                    <select id="m-category" required>
+                        <option value="오피스 핏아웃">오피스 핏아웃 (Office)</option>
+                        <option value="상업 공간">상업 공간 (Commercial)</option>
+                        <option value="프리미엄 주거">프리미엄 주거 (Residential)</option>
+                        <option value="기타">기타 리노베이션</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>상세 요구사항 (예산, 평수, 희망 컨셉 등)</label>
+                    <textarea id="m-details" required placeholder="상세히 적어주실수록 정확한 견적 산출이 가능합니다."></textarea>
+                </div>
+                <button type="submit" class="submit-btn" id="m-submit-btn">정식 프로젝트 접수하기</button>
+            </form>
+        </div>
+
+        <!-- 2. 비회원 간편 문의 폼 -->
+        <div id="guestTab" class="form-section">
+            <h2 class="form-title">비회원 간편 문의</h2>
+            <p class="form-desc">회원가입이 번거로우신 경우 기본 연락처만 남겨주세요. 담당자가 확인 후 신속하게 개별 연락을 드립니다.</p>
+            
+            <form id="guestOrderForm">
+                <div class="input-group">
+                    <label>성함 / 기업명</label>
+                    <input type="text" id="g-name" required placeholder="성함 또는 기업명을 입력해주세요">
+                </div>
+                <div class="input-group">
+                    <label>연락처</label>
+                    <input type="text" id="g-contact" required placeholder="연락 받으실 번호를 남겨주세요">
+                </div>
+                <div class="input-group">
+                    <label>문의 요약</label>
+                    <textarea id="g-details" required placeholder="궁금하신 점이나 간단한 공사 내용을 적어주세요."></textarea>
+                </div>
+                <button type="submit" class="submit-btn" id="g-submit-btn" style="background: #555;">간편 문의 접수하기</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ⚠️ 이전에 사용하신 마스터 웹 앱 URL을 반드시 아래에 넣어주세요!
+        const GAS_WEB_APP_URL = "여기에_마스터_URL을_넣어주세요";
+
+        // 탭 전환 기능
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.form-section').forEach(section => section.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            element.classList.add('active');
+        }
+
+        // 회원 정식 접수 처리 (로그인 검증 + 주문 접수 동시 처리)
+        document.getElementById('memberOrderForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('m-submit-btn');
+            btn.innerText = "데이터 검증 및 접수 중...";
+
+            // 1단계: 아이디/비밀번호 검증을 위한 로그인 payload
+            const loginPayload = { action: 'login', id: document.getElementById('m-id').value, pw: document.getElementById('m-pw').value };
+
+            try {
+                // 로그인 체크 통신
+                let loginRes = await fetch(GAS_WEB_APP_URL, { method: 'POST', body: JSON.stringify(loginPayload) });
+                let loginResult = await loginRes.json();
+
+                if (!loginResult.success) {
+                    alert("아이디 또는 비밀번호가 일치하지 않습니다. 가입 정보를 확인해주세요.");
+                    btn.innerText = "정식 프로젝트 접수하기";
+                    return;
+                }
+                
+                // 로그인 성공 시 2단계: 프로젝트 접수 payload
+                const orderPayload = {
+                    action: 'submit_order_and_link',
+                    name: document.getElementById('m-name').value,
+                    contact: document.getElementById('m-contact').value,
+                    email: loginResult.id, // 로그인된 아이디를 이메일 대용으로 사용
+                    category: document.getElementById('m-category').value,
+                    location: "회원 정식 접수",
+                    details: "[회원] " + document.getElementById('m-details').value
+                };
+
+                let orderRes = await fetch(GAS_WEB_APP_URL, { method: 'POST', body: JSON.stringify(orderPayload) });
+                let orderResult = await orderRes.json();
+
+                if (orderResult.success) {
+                    alert(`접수가 완료되었습니다!\n프로젝트 코드: ${orderResult.projectId}\n메인 화면으로 이동합니다.`);
+                    window.location.href = "index.html";
+                }
+            } catch (error) {
+                alert("서버 통신 오류가 발생했습니다.");
+            } finally {
+                btn.innerText = "정식 프로젝트 접수하기";
+            }
+        });
+
+        // 비회원 간편 문의 처리 (인증 없이 바로 ERP에 기록)
+        document.getElementById('guestOrderForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('g-submit-btn');
+            btn.innerText = "문의 접수 중...";
+
+            const payload = {
+                action: 'submit_order_and_link',
+                name: "[비회원] " + document.getElementById('g-name').value,
+                contact: document.getElementById('g-contact').value,
+                email: "비회원 (정보없음)",
+                category: "간편 문의",
+                location: "-",
+                details: document.getElementById('g-details').value
+            };
+
+            try {
+                let response = await fetch(GAS_WEB_APP_URL, { method: 'POST', body: JSON.stringify(payload) });
+                let result = await response.json();
+
+                if (result.success) {
+                    alert("간편 문의가 접수되었습니다.\n담당자가 내용을 확인 후 남겨주신 연락처로 신속히 연락드리겠습니다.");
+                    window.location.href = "index.html";
+                }
+            } catch (error) {
+                alert("서버 통신 오류가 발생했습니다.");
+            } finally {
+                btn.innerText = "간편 문의 접수하기";
+            }
+        });
+    </script>
+</body>
+</html>
