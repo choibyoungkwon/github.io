@@ -101,32 +101,23 @@
 				<span class="modal-close" id="closeLoginBtn">×</span>
 				<h2>Login</h2>
 				<form id="loginForm">
-					<div class="input-group">
-						<label>아이디</label
-						><input type="text" id="login-id" required />
-					</div>
-					<div class="input-group">
-						<label>비밀번호</label
-						><input type="password" id="login-pw" required />
-					</div>
-					<button
-						type="submit"
-						class="submit-btn"
-						id="loginSubmitBtn"
-					>
-						로그인</button
-					><label
-						>회원이 아니시면 아래 회원가입을 먼저하시기바랍니다.
-						회원가입을 하지않으시면 문의 주문에 제약이 있습니다. </label
-					><button
-						type="submit"
-						class="submit-btn"
-						id="loginSubmitBtn"
-					>
-						회원가입
-					</button>
-				</form>
-			</div>
+    <div class="input-group">
+        <label>아이디</label><input type="text" id="login-id" required />
+    </div>
+    <div class="input-group">
+        <label>비밀번호</label><input type="password" id="login-pw" required />
+    </div>
+    <button type="submit" class="submit-btn" id="loginSubmitBtn">로그인</button>
+    
+    <!-- 추가: 회원가입 전환 버튼 -->
+    <div style="margin-top: 15px; text-align: center;">
+        <p style="font-size: 14px; color: #666; margin-bottom: 10px;">
+            회원이 아니신가요?
+        </p>
+        <button type="button" class="submit-btn" id="goToSignupBtn" 
+                style="background: #666;">회원가입 하기</button>
+    </div>
+</form>.
 		</div>
 		<div class="modal-overlay" id="signupModal">
 			<div class="modal-content">
