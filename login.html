@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>JB Design | 로그인</title>
+		<style>
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				font-family: 'Helvetica Neue', 'Noto Sans KR', sans-serif;
+				color: #111;
+				background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+				min-height: 100vh;
+				display: flex;
+				flex-direction: column;
+			}
+
+			a {
+				text-decoration: none;
+				color: inherit;
+			}
+
+			/* 헤더 */
+			.header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 20px 50px;
+				background: #fff;
+				border-bottom: 1px solid #eaeaea;
+			}
+
+			.logo {
+				display: flex;
+				align-items: center;
+				font-size: 24px;
+				font-weight: 900;
+				letter-spacing: 1.5px;
+				cursor: pointer;
+				transition: color 0.3s;
+			}
+
+			.logo:hover {
+				color: #666;
+			}
+
+			.logo-img {
+				height: 35px;
+				margin-right: 12px;
+				object-fit: contain;
+			}
+
+			/* 메인 컨테이너 */
+			.container {
+				flex: 1;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 40px 20px;
+			}
+
+			.form-box {
+				background: #fff;
+				padding: 50px 40px;
+				border-radius: 12px;
+				box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+				width: 100%;
+				max-width: 420px;
+			}
+
+			.form-box h2 {
+				font-size: 28px;
+				margin-bottom: 30px;
+				text-align: center;
+				color: #111;
+			}
+
+			.form-group {
+				margin-bottom: 20px;
+			}
+
+			.form-group label {
+				display: block;
+				font-size: 13px;
+				font-weight: 700;
+				margin-bottom: 8px;
+				color: #333;
+				text-transform: uppercase;
+				letter-spacing: 0.5px;
+			}
+
+			.form-group input {
+				width: 100%;
+				padding: 12px 14px;
+				border: 1.5px solid #ddd;
+				border-radius: 6px;
+				font-size: 15px;
+				transition: all 0.3s;
+				font-family: inherit;
+			}
+
+			.form-group input:focus {
+				outline: none;
+				border-color: #111;
+				box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.08);
+			}
+
+			.submit-btn {
+				width: 100%;
+				padding: 14px;
+				background: #111;
+				color: #fff;
+				font-weight: 700;
+				border: none;
+				border-radius: 6px;
+				cursor: pointer;
+				font-size: 15px;
+				transition: all 0.3s;
+				margin-top: 10px;
+			}
+
+			.submit-btn:hover:not(:disabled) {
+				background: #333;
+			}
+
+			.submit-btn:disabled {
+				background: #ccc;
+				cursor: not-allowed;
+				opacity: 0.6;
+			}
+
+			.footer-link {
+				text-align: center;
+				margin-top: 20px;
+				font-size: 13px;
+				color: #666;
+			}
+
+			.footer-link a {
+				color: #111;
+				font-weight: 700;
+				transition: color 0.3s;
+			}
+
+			.footer-link a:hover {
+				color: #666;
+			}
+
+			.divider {
+				text-align: center;
+				margin: 25px 0;
+				color: #999;
+				font-size: 13px;
+			}
+
+			.signup-btn {
+				width: 100%;
+				padding: 14px;
+				background: #666;
+				color: #fff;
+				font-weight: 700;
+				border: none;
+				border-radius: 6px;
+				cursor: pointer;
+				font-size: 15px;
+				transition: all 0.3s;
+			}
+
+			.signup-btn:hover {
+				background: #333;
+			}
+
+			.back-home {
+				display: inline-block;
+				font-size: 13px;
+				color: #666;
+				margin-top: 20px;
+				transition: color 0.3s;
+			}
+
+			.back-home:hover {
+				color: #111;
+			}
+
+			/* 로딩 애니메이션 */
+			.loading-container {
+				text-align: center;
+				padding: 40px 20px;
+				display: none;
+			}
+
+			.loading-container.show {
+				display: block;
+			}
+
+			.loading-container h3 {
+				font-size: 22px;
+				margin-bottom: 15px;
+				color: #111;
+			}
+
+			.loading-container p {
+				color: #666;
+				font-size: 15px;
+				margin-bottom: 25px;
+			}
+
+			.spinner {
+				width: 35px;
+				height: 35px;
+				border: 3px solid #f3f3f3;
+				border-top: 3px solid #111;
+				border-radius: 50%;
+				animation: spin 1s linear infinite;
+				margin: 0 auto;
+			}
+
+			@keyframes spin {
+				0% {
+					transform: rotate(0deg);
+				}
+				100% {
+					transform: rotate(360deg);
+				}
+			}
+
+			/* 모바일 대응 */
+			@media (max-width: 768px) {
+				.header {
+					padding: 15px 20px;
+				}
+
+				.form-box {
+					padding: 30px 20px;
+				}
+
+				.container {
+					padding: 20px;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<!-- 헤더 -->
+		<div class="header">
+			<a href="index.html" class="logo">
+				<img
+					src="https://drive.google.com/thumbnail?id=1-qDwfz9rv8F7Hdq9pANFwhZNbfRLVvPR&sz=w1000"
+					class="logo-img"
+				/>
+				JB DESIGN
+			</a>
+		</div>
+
+		<!-- 메인 컨테이너 -->
+		<div class="container">
+			<div class="form-box">
+				<h2>로그인</h2>
+
+				<!-- 로그인 폼 -->
+				<form id="loginForm">
+					<div class="form-group">
+						<label>아이디</label>
+						<input
+							type="text"
+							id="login-id"
+							placeholder="아이디 입력"
+							required
+						/>
+					</div>
+
+					<div class="form-group">
+						<label>비밀번호</label>
+						<input
+							type="password"
+							id="login-pw"
+							placeholder="비밀번호 입력"
+							required
+						/>
+					</div>
+
+					<button type="submit" class="submit-btn" id="loginSubmitBtn">
+						로그인
+					</button>
+				</form>
+
+				<!-- 로딩 애니메이션 -->
+				<div class="loading-container" id="loadingContainer">
+					<h3>환영합니다!</h3>
+					<p id="welcomeMsg">시스템으로 안전하게 이동 중입니다...</p>
+					<div class="spinner"></div>
+				</div>
+
+				<div class="divider">또는</div>
+
+				<a href="signup.html" class="signup-btn">회원가입 하기</a>
+
+				<div class="footer-link">
+					<a href="#">아이디/비밀번호 찾기</a>
+				</div>
+
+				<a href="index.html" class="back-home">← 홈으로</a>
+			</div>
+		</div>
+
+		<script>
+			const GAS_WEB_APP_URL =
+				"https://script.google.com/macros/s/AKfycbxqi2XF2lUVThGI1UFbh7nnf0NPNaCbLRfOgS3GkKLggU_wnau4AI32NoBU5DWn57GtWg/exec";
+
+			// 로그인 폼 제출
+			document.getElementById("loginForm").addEventListener("submit", async function (e) {
+				e.preventDefault();
+				const btn = document.getElementById("loginSubmitBtn");
+				btn.innerText = "확인 중...";
+				btn.disabled = true;
+
+				const payload = {
+					action: "login",
+					id: document.getElementById("login-id").value.toLowerCase().trim(),
+					pw: document.getElementById("login-pw").value,
+				};
+
+				try {
+					const response = await fetch(GAS_WEB_APP_URL, {
+						method: "POST",
+						body: JSON.stringify(payload),
+					});
+					const result = await response.json();
+
+					if (result.success) {
+						if (result.status === "대기") {
+							alert(
+								"현재 가입 승인 대기 중입니다. 관리자 승인 후 이용 가능합니다."
+							);
+							btn.innerText = "로그인";
+							btn.disabled = false;
+						} else if (result.status === "승인") {
+							// 로그인 폼 숨기고 로딩 표시
+							document.getElementById("loginForm").style.display = "none";
+							const loadingContainer = document.getElementById(
+								"loadingContainer"
+							);
+							loadingContainer.classList.add("show");
+							document.getElementById("welcomeMsg").innerHTML =
+								`<span style="color:#555;">${result.name}</span>님! 시스템으로 안전하게 이동 중입니다...`;
+
+							// 1.5초 대기 후 페이지 이동
+							setTimeout(() => {
+								if (result.role === "직원") {
+									window.location.href = "erp_system.html";
+								} else if (result.role === "협력업체") {
+									window.location.href = "quote_submission.html";
+								} else {
+									window.location.href = "index.html";
+								}
+							}, 1500);
+						} else {
+							alert(
+								"계정이 반려되었거나 접근이 제한되었습니다."
+							);
+							btn.innerText = "로그인";
+							btn.disabled = false;
+						}
+					} else {
+						alert("등록된 정보가 없습니다. 회원가입 페이지로 이동합니다.");
+						window.location.href = "signup.html";
+					}
+				} catch (error) {
+					alert("서버 통신 오류가 발생했습니다.");
+					console.error(error);
+					btn.innerText = "로그인";
+					btn.disabled = false;
+				}
+			});
+		</script>
+	</body>
+</html>
