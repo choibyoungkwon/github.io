@@ -51,6 +51,38 @@
 
 			.login-btn:hover { background: #333; }
 
+			/* 언어 선택 버튼 */
+			.language-selector {
+				display: flex;
+				gap: 8px;
+				align-items: center;
+				margin-left: auto;
+				margin-right: 20px;
+			}
+
+			.language-btn {
+				padding: 6px 12px;
+				border: 1px solid #ddd;
+				background: #fff;
+				border-radius: 4px;
+				cursor: pointer;
+				font-size: 12px;
+				font-weight: 600;
+				transition: all 0.3s ease;
+				color: #111;
+			}
+
+			.language-btn:hover {
+				border-color: #111;
+				background: #f5f5f5;
+			}
+
+			.language-btn.active {
+				background: #111;
+				color: #fff;
+				border-color: #111;
+			}
+
 			/* 메인 히어로 섹션 */
 			.hero {
 				position: relative;
@@ -267,6 +299,13 @@
 
 				.nav-links a { padding: 8px 0; }
 
+				.language-selector {
+					margin-left: 0;
+					margin-right: 0;
+					width: 100%;
+					justify-content: center;
+				}
+
 				.hero-content h1 { font-size: 36px; }
 				.stats { flex-direction: column; gap: 30px; }
 				.portfolio-section { padding: 50px 20px; }
@@ -290,6 +329,15 @@
 				<a href="#contact">Contact</a>
 				<a href="JBdesign_order.html">Order (주문/결제)</a>
 				<a href="login.html" class="login-btn">Login</a>
+
+				<!-- 언어 선택 버튼 -->
+				<div class="language-selector">
+					<button class="language-btn active" data-lang="ko">한글</button>
+					<button class="language-btn" data-lang="en">English</button>
+					<button class="language-btn" data-lang="vi">Tiếng Việt</button>
+					<button class="language-btn" data-lang="ja">日本語</button>
+					<button class="language-btn" data-lang="zh-CN">中文</button>
+				</div>
 			</div>
 		</nav>
 
@@ -408,5 +456,91 @@
 				© 2026 JB DESIGN. All rights reserved.
 			</div>
 		</footer>
+
+		<!-- Google Translate 스크립트 -->
+		<script type="text/javascript">
+			function googleTranslateElementInit() {
+				new google.translate.TranslateElement({pageLanguage: 'ko', includedLanguages: 'ko,en,vi,ja,zh-CN'}, 'google_translate_element');
+			}
+		</script>
+		<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+		<!-- 숨겨진 Google Translate 요소 -->
+		<div id="google_translate_element" style="display:none;"></div>
+
+		<script>
+			// 언어 선택 버튼 기능
+			document.querySelectorAll('.language-btn').forEach(btn => {
+				btn.addEventListener('click', function() {
+					const lang = this.getAttribute('data-lang');
+					
+					// 활성 버튼 업데이트
+					document.querySelectorAll('.language-btn').forEach(b => {
+						b.classList.remove('active');
+					});
+					this.classList.add('active');
+
+					// 언어 변경
+					if (lang === 'ko') {
+						// 한글로 돌아가기 - 페이지 새로고침
+						location.reload();
+					} else {
+						// Google Translate 사용
+						const selectElement = document.querySelector('.goog-te-combo');
+						if (selectElement) {
+							selectElement.value = lang;
+							selectElement.dispatchEvent(new Event('change'));
+						} else {
+							// Fallback: 잠시 후 재시도
+							setTimeout(() => {
+								const selectElement = document.querySelector('.goog-te-combo');
+								if (selectElement) {
+									selectElement.value = lang;
+									selectElement.dispatchEvent(new Event('change'));
+								}
+							}, 1000);
+						}
+					}
+				});
+			});
+
+			// 페이지 로드 시 저장된 언어 확인
+			window.addEventListener('load', function() {
+				// Google Translate 로드 대기
+				setTimeout(() => {
+					const savedLang = localStorage.getItem('selectedLanguage');
+					if (savedLang && savedLang !== 'ko') {
+						const selectElement = document.querySelector('.goog-te-combo');
+						if (selectElement) {
+							selectElement.value = savedLang;
+							selectElement.dispatchEvent(new Event('change'));
+						}
+					}
+				}, 2000);
+			});
+
+			// 언어 변경 감지
+			document.addEventListener('DOMContentLoaded', function() {
+				const observer = new MutationObserver(function() {
+					const selectElement = document.querySelector('.goog-te-combo');
+					if (selectElement) {
+						selectElement.addEventListener('change', function() {
+							const selectedLang = this.value;
+							localStorage.setItem('selectedLanguage', selectedLang);
+							
+							// 버튼 상태 업데이트
+							document.querySelectorAll('.language-btn').forEach(btn => {
+								btn.classList.remove('active');
+								if (btn.getAttribute('data-lang') === selectedLang) {
+									btn.classList.add('active');
+								}
+							});
+						});
+					}
+				});
+
+				observer.observe(document.body, { childList: true, subtree: true });
+			});
+		</script>
 	</body>
 </html>
