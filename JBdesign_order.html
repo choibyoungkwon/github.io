@@ -13,8 +13,39 @@
         /* 네비게이션 바 */
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: #fff; border-bottom: 1px solid #eaeaea; }
         .logo { font-size: 24px; font-weight: 900; letter-spacing: 1px; }
-        .nav-links { display: flex; gap: 30px; font-size: 15px; font-weight: 600; }
+        .nav-links { display: flex; gap: 30px; font-size: 15px; font-weight: 600; align-items: center; }
         .nav-links a:hover { color: #666; }
+
+        /* 언어 선택 버튼 */
+        .language-selector {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .language-btn {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            background: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #111;
+        }
+
+        .language-btn:hover {
+            border-color: #111;
+            background: #f5f5f5;
+        }
+
+        .language-btn.active {
+            background: #111;
+            color: #fff;
+            border-color: #111;
+        }
 
         /* 헤더 섹션 */
         .header { background: #111; color: #fff; text-align: center; padding: 60px 20px; }
@@ -49,11 +80,14 @@
         .input-group input:focus, .input-group textarea:focus { border-color: #111; outline: none; }
         .input-group textarea { resize: vertical; min-height: 120px; }
 
-        .submit-btn { width: 100%; padding: 18px; background: #111; color: #fff; font-size: 16px; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; transition: background 0.3s; margin-top: 10px; }
+        .submit-btn { width: 100%; padding: 18px; background: #111; color: #fff; font-size: 16px; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; transition: background 0.3s; }
         .submit-btn:hover { background: #333; }
 
         /* 모바일 대응 */
         @media (max-width: 768px) {
+            .navbar { flex-direction: column; gap: 15px; padding: 15px 20px; }
+            .nav-links { flex-direction: column; gap: 10px; width: 100%; }
+            .language-selector { margin-left: 0; width: 100%; justify-content: center; }
             .benefits-list { flex-direction: column; gap: 10px; }
             .container { margin: 0; border-radius: 0; box-shadow: none; }
             .form-section { padding: 30px 20px; }
@@ -66,6 +100,14 @@
         <div class="logo">JB DESIGN</div>
         <div class="nav-links">
             <a href="index.html">Home</a>
+            <!-- 언어 선택 버튼 -->
+            <div class="language-selector">
+                <button class="language-btn active" data-lang="ko">한글</button>
+                <button class="language-btn" data-lang="en">English</button>
+                <button class="language-btn" data-lang="vi">Tiếng Việt</button>
+                <button class="language-btn" data-lang="ja">日本語</button>
+                <button class="language-btn" data-lang="zh-CN">中文</button>
+            </div>
         </div>
     </nav>
 
@@ -113,7 +155,7 @@
                     </div>
                     <div class="input-group" style="flex: 1;">
                         <label>비밀번호</label>
-                        <input type="password" id="m-pw" required placeholder="비밀번호 입력">
+                        <input type="password" id="m-pw" required placeholder="비밀���호 입력">
                     </div>
                 </div>
                 <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0 30px;">
@@ -165,6 +207,9 @@
             </form>
         </div>
     </div>
+
+    <!-- 숨겨진 Google Translate 요소 -->
+    <div id="google_translate_element" style="display:none;"></div>
 
     <script>
         // ⚠️ 이전에 사용하신 마스터 웹 앱 URL을 반드시 아래에 넣어주세요!
@@ -254,5 +299,8 @@
             }
         });
     </script>
+
+    <!-- 공유 번역 스크립트 로드 -->
+    <script src="js/translate-setup.js"></script>
 </body>
 </html>
