@@ -1,168 +1,127 @@
-// 다국어 번역 설정을 관리하는 공유 스크립트
-(function() {
-	const LANGUAGE_KEY = 'jbdesign_language';
-	const DEFAULT_LANGUAGE = 'ko';
+// 다국어 번역 설정 - 모든 페이지에서 공유하는 스크립트
 
-	// Google Translate 초기화
-	function initGoogleTranslate() {
-		window.googleTranslateElementInit = function() {
-			try {
-				new google.translate.TranslateElement(
-					{
-						pageLanguage: DEFAULT_LANGUAGE,
-						includedLanguages: 'ko,en,vi,ja,zh-CN',
-						layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-					},
-					'google_translate_element'
-				);
-			} catch (e) {
-				console.log('Google Translate initialization pending...');
-			}
-		};
+// 1. localStorage에서 저장된 언어 가져오기
+function getSavedLanguage() {
+	return localStorage.getItem('jb-design-language') || 'ko';
+}
 
-		// Google Translate 스크립트 로드
-		if (!document.getElementById('google-translate-script')) {
-			const script = document.createElement('script');
-			script.id = 'google-translate-script';
-			script.type = 'text/javascript';
-			script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-			document.head.appendChild(script);
+// 2. 언어 버튼 이벤트 리스너
+function initLanguageButtons() {
+	const buttons = document.querySelectorAll('.language-btn');
+	const savedLang = getSavedLanguage();
+	
+	buttons.forEach(button => {
+		const lang = button.getAttribute('data-lang');
+		
+		// 저장된 언어에 맞게 active 클래스 설정
+		if (lang === savedLang) {
+			button.classList.add('active');
 		}
-	}
-
-	// 저장된 언어 설정 가져오기
-	function getSavedLanguage() {
-		return localStorage.getItem(LANGUAGE_KEY) || DEFAULT_LANGUAGE;
-	}
-
-	// 언어 설정 저장
-	function saveLanguage(lang) {
-		localStorage.setItem(LANGUAGE_KEY, lang);
-	}
-
-	// Google Translate 콤보박스에서 언어 변경
-	function changeLanguage(lang) {
-		if (lang === DEFAULT_LANGUAGE) {
-			// 한글로 돌아가기
-			location.reload();
-			return;
-		}
-
-		// Google Translate 드롭다운에서 언어 선택
-		const selectElement = document.querySelector('.goog-te-combo');
-		if (selectElement) {
-			selectElement.value = lang;
-			selectElement.dispatchEvent(new Event('change'));
-			saveLanguage(lang);
-		} else {
-			// 드롭다운이 아직 로드되지 않았으면 재시도
-			setTimeout(() => {
-				const select = document.querySelector('.goog-te-combo');
-				if (select) {
-					select.value = lang;
-					select.dispatchEvent(new Event('change'));
-					saveLanguage(lang);
-				}
-			}, 1000);
-		}
-	}
-
-	// 언어 버튼 활성화 상태 업데이트
-	function updateLanguageButtons(currentLang) {
-		const buttons = document.querySelectorAll('.language-btn');
-		buttons.forEach(btn => {
-			const btnLang = btn.getAttribute('data-lang');
-			if (btnLang === currentLang) {
-				btn.classList.add('active');
-			} else {
-				btn.classList.remove('active');
-			}
-		});
-	}
-
-	// 언어 버튼 이벤트 리스너 설정
-	function setupLanguageButtons() {
-		const buttons = document.querySelectorAll('.language-btn');
-		buttons.forEach(btn => {
-			btn.addEventListener('click', function(e) {
-				e.preventDefault();
-				const lang = this.getAttribute('data-lang');
-				updateLanguageButtons(lang);
-				changeLanguage(lang);
-			});
-		});
-	}
-
-	// 페이지 로드 시 실행
-	function init() {
-		// Google Translate 초기화
-		initGoogleTranslate();
-
-		// 저장된 언어 설정 복원
-		const savedLang = getSavedLanguage();
-		updateLanguageButtons(savedLang);
-
-		// 도큐먼트 레디 상태 확인
-		if (document.readyState === 'loading') {
-			document.addEventListener('DOMContentLoaded', function() {
-				setupLanguageButtons();
-				
-				// Google Translate 로드 대기 후 언어 적용
-				setTimeout(() => {
-					if (savedLang !== DEFAULT_LANGUAGE) {
-						changeLanguage(savedLang);
-					}
-				}, 2000);
-
-				// Google Translate 콤보박스 변경 감지
-				observeGoogleTranslate();
-			});
-		} else {
-			setupLanguageButtons();
+		
+		// 클릭 이벤트
+		button.addEventListener('click', function(e) {
+			e.preventDefault();
 			
-			// Google Translate 로드 대기 후 언어 적용
-			setTimeout(() => {
-				if (savedLang !== DEFAULT_LANGUAGE) {
-					changeLanguage(savedLang);
-				}
-			}, 2000);
-
-			// Google Translate 콤보박스 변경 감지
-			observeGoogleTranslate();
-		}
-	}
-
-	// Google Translate 콤보박스 변경 감지
-	function observeGoogleTranslate() {
-		const observer = new MutationObserver(function() {
-			const selectElement = document.querySelector('.goog-te-combo');
-			if (selectElement) {
-				// 한 번만 리스너 추가하기 위해 데이터 속성 확인
-				if (!selectElement.dataset.listenerAdded) {
-					selectElement.addEventListener('change', function() {
-						const selectedLang = this.value;
-						saveLanguage(selectedLang);
-						updateLanguageButtons(selectedLang);
-					});
-					selectElement.dataset.listenerAdded = 'true';
-				}
-			}
+			// 모든 버튼에서 active 클래스 제거
+			buttons.forEach(btn => btn.classList.remove('active'));
+			
+			// 클릭한 버튼에 active 클래스 추가
+			this.classList.add('active');
+			
+			// localStorage에 언어 저장
+			localStorage.setItem('jb-design-language', lang);
+			
+			// Google Translate 언어 변경
+			translatePage(lang);
 		});
+	});
+}
 
-		observer.observe(document.body, { childList: true, subtree: true });
-	}
-
-	// DOM이 완전히 로드되면 실행
-	if (document.readyState === 'loading') {
-		document.addEventListener('DOMContentLoaded', init);
+// 3. Google Translate API를 사용한 번역 함수
+function translatePage(lang) {
+	if (lang === 'ko') {
+		// 한글로 되돌리기 - 페이지 새로고침
+		location.reload();
 	} else {
-		init();
+		// Google Translate 로드 및 실행
+		loadGoogleTranslate(lang);
 	}
+}
 
-	// 모듈 export
-	window.JBTranslate = {
-		getSavedLanguage: getSavedLanguage,
-		changeLanguage: changeLanguage,
-		updateLanguageButtons: updateLanguageButtons
+// 4. Google Translate 스크립트 로드 및 실행
+function loadGoogleTranslate(lang) {
+	// Google Translate가 이미 로드된 경우
+	if (typeof google !== 'undefined' && typeof google.translate !== 'undefined') {
+		executeTranslate(lang);
+	} else {
+		// Google Translate 스크립트 동적 로드
+		const script = document.createElement('script');
+		script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+		document.head.appendChild(script);
+		
+		// 콜백 함수 설정
+		window.googleTranslateElementInit = function() {
+			new google.translate.TranslateElement({
+				pageLanguage: 'ko',
+				includedLanguages: 'ko,en,vi,ja,zh-CN',
+				layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+				autoDisplay: false
+			}, 'google_translate_element');
+			
+			executeTranslate(lang);
+		};
+	}
+}
+
+// 5. 실제 번역 실행
+function executeTranslate(lang) {
+	const langMap = {
+		'en': 'en',
+		'vi': 'vi',
+		'ja': 'ja',
+		'zh-CN': 'zh-CN'
 	};
-})();
+	
+	const targetLang = langMap[lang] || 'en';
+	
+	// Google Translate 요소 찾기
+	const googleTranslateElement = document.querySelector('.goog-te-combo');
+	
+	if (googleTranslateElement) {
+		// 언어 선택
+		googleTranslateElement.value = targetLang;
+		
+		// 변경 이벤트 트리거
+		googleTranslateElement.dispatchEvent(new Event('change'));
+	} else {
+		// 재시도 (짧은 지연 후)
+		setTimeout(() => executeTranslate(lang), 500);
+	}
+}
+
+// 6. 페이지 로드 시 저장된 언어로 번역
+document.addEventListener('DOMContentLoaded', function() {
+	// 언어 버튼 초기화
+	initLanguageButtons();
+	
+	// 저장된 언어가 한글이 아닌 경우 자동 번역
+	const savedLang = getSavedLanguage();
+	if (savedLang !== 'ko') {
+		// 약간의 딜레이 후 번역 실행
+		setTimeout(() => {
+			translatePage(savedLang);
+		}, 500);
+	}
+});
+
+// 7. Google Translate 스타일 숨김 (필요시)
+document.addEventListener('DOMContentLoaded', function() {
+	const style = document.createElement('style');
+	style.textContent = `
+		.goog-te-banner-frame { display: none; }
+		.goog-te-combo { display: none; }
+		.skiptranslate { display: none; }
+		body { top: 0 !important; }
+	`;
+	document.head.appendChild(style);
+});
