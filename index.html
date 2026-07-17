@@ -457,90 +457,10 @@
 			</div>
 		</footer>
 
-		<!-- Google Translate 스크립트 -->
-		<script type="text/javascript">
-			function googleTranslateElementInit() {
-				new google.translate.TranslateElement({pageLanguage: 'ko', includedLanguages: 'ko,en,vi,ja,zh-CN'}, 'google_translate_element');
-			}
-		</script>
-		<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
 		<!-- 숨겨진 Google Translate 요소 -->
 		<div id="google_translate_element" style="display:none;"></div>
 
-		<script>
-			// 언어 선택 버튼 기능
-			document.querySelectorAll('.language-btn').forEach(btn => {
-				btn.addEventListener('click', function() {
-					const lang = this.getAttribute('data-lang');
-					
-					// 활성 버튼 업데이트
-					document.querySelectorAll('.language-btn').forEach(b => {
-						b.classList.remove('active');
-					});
-					this.classList.add('active');
-
-					// 언어 변경
-					if (lang === 'ko') {
-						// 한글로 돌아가기 - 페이지 새로고침
-						location.reload();
-					} else {
-						// Google Translate 사용
-						const selectElement = document.querySelector('.goog-te-combo');
-						if (selectElement) {
-							selectElement.value = lang;
-							selectElement.dispatchEvent(new Event('change'));
-						} else {
-							// Fallback: 잠시 후 재시도
-							setTimeout(() => {
-								const selectElement = document.querySelector('.goog-te-combo');
-								if (selectElement) {
-									selectElement.value = lang;
-									selectElement.dispatchEvent(new Event('change'));
-								}
-							}, 1000);
-						}
-					}
-				});
-			});
-
-			// 페이지 로드 시 저장된 언어 확인
-			window.addEventListener('load', function() {
-				// Google Translate 로드 대기
-				setTimeout(() => {
-					const savedLang = localStorage.getItem('selectedLanguage');
-					if (savedLang && savedLang !== 'ko') {
-						const selectElement = document.querySelector('.goog-te-combo');
-						if (selectElement) {
-							selectElement.value = savedLang;
-							selectElement.dispatchEvent(new Event('change'));
-						}
-					}
-				}, 2000);
-			});
-
-			// 언어 변경 감지
-			document.addEventListener('DOMContentLoaded', function() {
-				const observer = new MutationObserver(function() {
-					const selectElement = document.querySelector('.goog-te-combo');
-					if (selectElement) {
-						selectElement.addEventListener('change', function() {
-							const selectedLang = this.value;
-							localStorage.setItem('selectedLanguage', selectedLang);
-							
-							// 버튼 상태 업데이트
-							document.querySelectorAll('.language-btn').forEach(btn => {
-								btn.classList.remove('active');
-								if (btn.getAttribute('data-lang') === selectedLang) {
-									btn.classList.add('active');
-								}
-							});
-						});
-					}
-				});
-
-				observer.observe(document.body, { childList: true, subtree: true });
-			});
-		</script>
+		<!-- 공유 번역 스크립트 로드 -->
+		<script src="js/translate-setup.js"></script>
 	</body>
 </html>
