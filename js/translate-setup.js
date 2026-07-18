@@ -6,6 +6,7 @@
 	const SCRIPT_ID = 'google-translate-script';
 	const SUPPORTED_LANGS = [SOURCE_LANGUAGE, 'en', 'vi', 'ja', 'zh-CN'];
 	const TRANSLATE_ELEMENT_ID = 'google_translate_element';
+	const COOKIE_MAX_AGE_SECONDS = 31536000;
 	const MANUAL_TRANSLATIONS = {
 		'아이디 입력': {
 			en: 'Enter your ID',
@@ -405,7 +406,7 @@
 
 		document.cookie = `googtrans=${encodeURIComponent(
 			`/${SOURCE_LANGUAGE}/${lang}`
-		)}; path=/; Max-Age=31536000; SameSite=Lax${
+		)}; path=/; Max-Age=${COOKIE_MAX_AGE_SECONDS}; SameSite=Lax${
 			window.location.protocol === 'https:' ? '; Secure' : ''
 		}`;
 		await ensureGoogleTranslateLoaded();
