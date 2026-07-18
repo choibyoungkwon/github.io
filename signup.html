@@ -55,6 +55,38 @@
 				object-fit: contain;
 			}
 
+			.header-controls {
+				display: flex;
+				align-items: center;
+				gap: 16px;
+			}
+
+			.language-selector {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 8px;
+				justify-content: flex-end;
+			}
+
+			.language-btn {
+				padding: 8px 14px;
+				border: 1px solid #ddd;
+				border-radius: 999px;
+				background: #fff;
+				color: #111;
+				font-size: 12px;
+				font-weight: 700;
+				cursor: pointer;
+				transition: all 0.3s;
+			}
+
+			.language-btn:hover,
+			.language-btn.active {
+				background: #111;
+				color: #fff;
+				border-color: #111;
+			}
+
 			/* 메인 컨테이너 */
 			.container {
 				flex: 1;
@@ -291,6 +323,8 @@
 			@media (max-width: 768px) {
 				.header {
 					padding: 15px 20px;
+					align-items: flex-start;
+					gap: 16px;
 				}
 
 				.form-box {
@@ -300,12 +334,17 @@
 				.container {
 					padding: 20px;
 				}
+
+				.header-controls {
+					width: 100%;
+					justify-content: flex-end;
+				}
 			}
 		</style>
 	</head>
 	<body>
 		<!-- 헤더 -->
-		<div class="header">
+		<div class="header notranslate" translate="no">
 			<a href="index.html" class="logo">
 				<img
 					src="https://drive.google.com/thumbnail?id=1-qDwfz9rv8F7Hdq9pANFwhZNbfRLVvPR&sz=w1000"
@@ -313,6 +352,25 @@
 				/>
 				JB DESIGN
 			</a>
+			<div class="header-controls">
+				<div class="language-selector">
+					<button class="language-btn active" data-lang="ko" aria-pressed="true">
+						Korean
+					</button>
+					<button class="language-btn" data-lang="en" aria-pressed="false">
+						English
+					</button>
+					<button class="language-btn" data-lang="vi" aria-pressed="false">
+						Vietnamese
+					</button>
+					<button class="language-btn" data-lang="ja" aria-pressed="false">
+						Japanese
+					</button>
+					<button class="language-btn" data-lang="zh-CN" aria-pressed="false">
+						Chinese
+					</button>
+				</div>
+			</div>
 		</div>
 
 		<!-- 메인 컨테이너 -->
@@ -329,6 +387,7 @@
 								type="text"
 								id="signup-id"
 								placeholder="소문자 3자 이상"
+								data-jb-placeholder="소문자 3자 이상"
 								required
 							/>
 							<span class="status-indicator" id="id-status"></span>
@@ -344,6 +403,7 @@
 								type="password"
 								id="signup-pw"
 								placeholder="6자 이상, 숫자·특수문자 포함"
+								data-jb-placeholder="6자 이상, 숫자·특수문자 포함"
 								required
 							/>
 							<span class="status-indicator" id="pw-status"></span>
@@ -365,6 +425,7 @@
 								type="password"
 								id="signup-pw-confirm"
 								placeholder="비밀번호 다시 입력"
+								data-jb-placeholder="비밀번호 다시 입력"
 								required
 							/>
 							<span class="status-indicator" id="pw-confirm-status"></span>
@@ -379,6 +440,7 @@
 							type="text"
 							id="signup-name"
 							placeholder="실명 입력"
+							data-jb-placeholder="실명 입력"
 							required
 						/>
 					</div>
@@ -387,9 +449,11 @@
 					<div class="form-group">
 						<label>가입 유형</label>
 						<select id="signup-role">
-							<option value="고객">고객</option>
-							<option value="협력업체">협력업체</option>
-							<option value="직원">직원</option>
+							<option value="고객" data-jb-option-label="고객">고객</option>
+							<option value="협력업체" data-jb-option-label="협력업체">
+								협력업체
+							</option>
+							<option value="직원" data-jb-option-label="직원">직원</option>
 						</select>
 					</div>
 
@@ -406,9 +470,19 @@
 			</div>
 		</div>
 
+		<div
+			id="google_translate_element"
+			aria-hidden="true"
+			style="position:absolute;left:-9999px;top:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;"
+		></div>
+
+		<script src="js/translate-setup.js"></script>
+
 		<script>
 			const GAS_WEB_APP_URL =
 				"https://script.google.com/macros/s/AKfycbxqi2XF2lUVThGI1UFbh7nnf0NPNaCbLRfOgS3GkKLggU_wnau4AI32NoBU5DWn57GtWg/exec";
+			const t = (text) =>
+				window.JBTranslateSetup ? window.JBTranslateSetup.translateText(text) : text;
 
 			// ===== 아이디 검증 =====
 			const idInput = document.getElementById("signup-id");
@@ -426,14 +500,14 @@
 
 				if (id.length < 3) {
 					if (id.length > 0) {
-						idMsg.textContent = "아이디는 3자 이상이어야 합니다.";
+						idMsg.textContent = t("아이디는 3자 이상이어야 합니다.");
 						idMsg.classList.add("show", "error");
 					}
 					return;
 				}
 
 				if (!/^[a-z0-9]+$/.test(id)) {
-					idMsg.textContent = "아이디는 소문자와 숫자만 사용 가능합니다.";
+					idMsg.textContent = t("아이디는 소문자와 숫자만 사용 가능합니다.");
 					idMsg.classList.add("show", "error");
 					idStatus.textContent = "✕";
 					idStatus.className = "status-indicator invalid";
@@ -459,12 +533,12 @@
 						if (result.available) {
 							idStatus.textContent = "✓";
 							idStatus.className = "status-indicator valid";
-							idMsg.textContent = "사용 가능한 아이디입니다.";
+							idMsg.textContent = t("사용 가능한 아이디입니다.");
 							idMsg.classList.add("show", "success");
 						} else {
 							idStatus.textContent = "✕";
 							idStatus.className = "status-indicator invalid";
-							idMsg.textContent = "이미 사용 중인 아이디입니다.";
+							idMsg.textContent = t("이미 사용 중인 아이디입니다.");
 							idMsg.classList.add("show", "error");
 						}
 					} catch (error) {
@@ -510,12 +584,12 @@
 				} else if (isValid) {
 					pwStatus.textContent = "✓";
 					pwStatus.className = "status-indicator valid";
-					pwMsg.textContent = "안전한 비밀번호입니다.";
+					pwMsg.textContent = t("안전한 비밀번호입니다.");
 					pwMsg.classList.add("show", "success");
 				} else {
 					pwStatus.textContent = "✕";
 					pwStatus.className = "status-indicator invalid";
-					pwMsg.textContent = "요구사항을 만족하지 않습니다.";
+					pwMsg.textContent = t("요구사항을 만족하지 않습니다.");
 					pwMsg.classList.add("show", "error");
 				}
 
@@ -539,12 +613,12 @@
 				if (pw === pwConfirm) {
 					pwConfirmStatus.textContent = "✓";
 					pwConfirmStatus.className = "status-indicator valid";
-					pwConfirmMsg.textContent = "비밀번호가 일치합니다.";
+					pwConfirmMsg.textContent = t("비밀번호가 일치합니다.");
 					pwConfirmMsg.classList.add("show", "success");
 				} else {
 					pwConfirmStatus.textContent = "✕";
 					pwConfirmStatus.className = "status-indicator invalid";
-					pwConfirmMsg.textContent = "비밀번호가 일치하지 않습니다.";
+					pwConfirmMsg.textContent = t("비밀번호가 일치하지 않습니다.");
 					pwConfirmMsg.classList.add("show", "error");
 				}
 			}
@@ -573,11 +647,11 @@
 					const role = document.getElementById("signup-role").value;
 
 					if (pw !== pwConfirm) {
-						alert("비밀번호가 일치하지 않습니다.");
+						alert(t("비밀번호가 일치하지 않습니다."));
 						return;
 					}
 
-					btn.innerText = "가입 처리 중...";
+					btn.innerText = t("가입 처리 중...");
 					btn.disabled = true;
 
 					const payload = {
@@ -597,26 +671,20 @@
 
 						if (result.success) {
 							if (result.status === "승인") {
-								alert(
-									"고객 회원가입이 완료되었습니다. 즉시 로그인이 가능합니다."
-								);
+								alert(t("고객 회원가입이 완료되었습니다. 즉시 로그인이 가능합니다."));
 							} else {
-								alert(
-									"가입 신청이 완료되었습니다. 관리자 승인 후 로그인이 가능합니다."
-								);
+								alert(t("가입 신청이 완료되었습니다. 관리자 승인 후 로그인이 가능합니다."));
 							}
 							window.location.href = "login.html";
 						} else {
-							alert(
-								"회원가입에 실패했습니다. 다시 시도해주세요."
-							);
-							btn.innerText = "회원가입";
+							alert(t("회원가입에 실패했습니다. 다시 시도해주세요."));
+							btn.innerText = t("회원가입");
 							btn.disabled = false;
 						}
 					} catch (error) {
-						alert("서버 통신 오류가 발생했습니다.");
+						alert(t("서버 통신 오류가 발생했습니다."));
 						console.error(error);
-						btn.innerText = "회원가입";
+						btn.innerText = t("회원가입");
 						btn.disabled = false;
 					}
 				});
