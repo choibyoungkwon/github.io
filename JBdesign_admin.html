@@ -1,90 +1,164 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>JB Design | 홈페이지 관리자</title>
-    <style>
-        body { font-family: 'Noto Sans KR', sans-serif; background: #f4f4f4; padding: 50px; }
-        .admin-container { max-width: 600px; background: #fff; padding: 40px; border-radius: 8px; margin: 0 auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h2 { margin-top: 0; color: #111; border-bottom: 2px solid #111; padding-bottom: 15px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-weight: bold; margin-bottom: 8px; font-size: 14px; }
-        select, input[type="text"], textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: inherit; }
-        textarea { height: 100px; resize: vertical; }
-        .btn-submit { width: 100%; padding: 15px; background: #111; color: #fff; font-size: 16px; font-weight: bold; border: none; cursor: pointer; border-radius: 4px; }
-        .btn-submit:hover { background: #333; }
-    </style>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>JB Design | 홈페이지 관리자</title>
+	<style>
+		body {
+			font-family: 'Noto Sans KR', sans-serif;
+			background: #f4f4f4;
+			padding: 50px;
+		}
+		.admin-container {
+			max-width: 600px;
+			background: #fff;
+			padding: 40px;
+			border-radius: 8px;
+			margin: 0 auto;
+			box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+		}
+		h2 {
+			margin-top: 0;
+			color: #111;
+			border-bottom: 2px solid #111;
+			padding-bottom: 15px;
+		}
+		.form-group { margin-bottom: 20px; }
+		label { display: block; font-weight: bold; margin-bottom: 8px; font-size: 14px; }
+		select, input[type="text"], textarea, input[type="file"] {
+			width: 100%;
+			padding: 12px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			box-sizing: border-box;
+			font-family: inherit;
+		}
+		textarea { height: 100px; resize: vertical; }
+		.btn-submit {
+			width: 100%;
+			padding: 15px;
+			background: #111;
+			color: #fff;
+			font-size: 16px;
+			font-weight: bold;
+			border: none;
+			cursor: pointer;
+			border-radius: 4px;
+		}
+		.btn-submit:hover:not(:disabled) { background: #333; }
+		.btn-submit:disabled { background: #aaa; cursor: not-allowed; }
+		.helper { font-size: 12px; color: #666; margin-top: 6px; }
+	</style>
 </head>
 <body>
-    <div class="admin-container">
-        <h2>홈페이지 자료 업로드</h2>
-        <form id="uploadForm">
-            <div class="form-group">
-                <label>어디에 들어갈 자료인가요? (카테고리 선택)</label>
-                <select id="section">
-                    <option value="배경화면">메인 배경사진 및 문구 (Hero)</option>
-                    <option value="배너">중간 배너 (Stats/Banner)</option>
-                    <option value="포트폴리오_오피스">포트폴리오 - 오피스</option>
-                    <option value="포트폴리오_상업공간">포트폴리오 - 상업공간</option>
-                    <option value="포트폴리오_레지던스">포트폴리오 - 레지던스</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>제목 (Title)</label>
-                <input type="text" id="title" placeholder="예: 공간의 본질에 기능과 가치를 더하다" required>
-            </div>
-            <div class="form-group">
-                <label>설명 (Description)</label>
-                <textarea id="desc" placeholder="세부 설명을 적어주세요."></textarea>
-            </div>
-            <div class="form-group">
-                <label>사진 파일 첨부</label>
-                <input type="file" id="file" accept="image/*" required>
-            </div>
-            <button type="button" class="btn-submit" onclick="uploadData()">구글 드라이브에 업로드 및 홈페이지 반영</button>
-        </form>
-    </div>
+	<div class="admin-container">
+		<h2>홈페이지 자료 업로드</h2>
+		<form id="uploadForm">
+			<div class="form-group">
+				<label>어디에 들어갈 자료인가요? (카테고리 선택)</label>
+				<select id="section" required>
+					<option value="배경화면">메인 배경사진 및 문구 (Hero)</option>
+					<option value="배너">중간 배너 (Stats/Banner)</option>
+					<option value="포트폴리오_오피스">포트폴리오 - 오피스</option>
+					<option value="포트폴리오_상업공간">포트폴리오 - 상업공간</option>
+					<option value="포트폴리오_레지던스">포트폴리오 - 레지던스</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label>제목 (Title)</label>
+				<input type="text" id="title" placeholder="예: 공간의 본질에 기능과 가치를 더하다" required />
+			</div>
+			<div class="form-group">
+				<label>설명 (Description)</label>
+				<textarea id="desc" placeholder="세부 설명을 적어주세요."></textarea>
+			</div>
+			<div class="form-group">
+				<label>사진 파일 첨부</label>
+				<input type="file" id="file" accept="image/*" required />
+				<p class="helper">권장: 5MB 이하 이미지 (jpg, png, webp)</p>
+			</div>
+			<button type="submit" class="btn-submit" id="submitBtn">구글 드라이브에 업로드 및 홈페이지 반영</button>
+		</form>
+	</div>
 
-    <script>
-        function uploadData() {
-            const form = document.getElementById('uploadForm');
-            if(!form.checkValidity()) { alert("모든 항목을 입력하고 사진을 첨부해 주세요."); return; }
+	<script>
+		const webAppUrl = "https://script.google.com/macros/s/AKfycbwxuTGvuW8tCQ1c3pIa5ZwC__SXEuIth_i0kqyloenTvBA3QSSU3564WlmZDd0JsUOi/exec";
+		const form = document.getElementById("uploadForm");
+		const btn = document.getElementById("submitBtn");
 
-            const btn = document.querySelector('.btn-submit');
-            btn.innerText = "업로드 중... (창을 닫지 마세요)";
-            btn.disabled = true;
+		function setBtnState(text, disabled) {
+			btn.innerText = text;
+			btn.disabled = disabled;
+		}
 
-            const fileInput = document.getElementById('file');
-            const file = fileInput.files[0];
-            const reader = new FileReader();
+		function fileToBase64(file) {
+			return new Promise((resolve, reject) => {
+				const reader = new FileReader();
+				reader.onload = (e) => resolve(e.target.result.split(",")[1]);
+				reader.onerror = reject;
+				reader.readAsDataURL(file);
+			});
+		}
 
-            reader.onload = function(e) {
-                const base64Data = e.target.result.split(',')[1];
-                const formData = new FormData();
-                
-                formData.append('section', document.getElementById('section').value);
-                formData.append('title', document.getElementById('title').value);
-                formData.append('desc', document.getElementById('desc').value);
-                formData.append('fileData', base64Data);
-                formData.append('fileName', file.name);
-                formData.append('mimeType', file.type);
+		form.addEventListener("submit", async (e) => {
+			e.preventDefault();
 
-                // ⚠️ 여기에 배포하신 웹앱 URL을 입력해 주세요!
-                const webAppUrl = "https://script.google.com/macros/s/AKfycbwxuTGvuW8tCQ1c3pIa5ZwC__SXEuIth_i0kqyloenTvBA3QSSU3564WlmZDd0JsUOi/exec";
+			if (!form.checkValidity()) {
+				alert("모든 항목을 입력하고 사진을 첨부해 주세요.");
+				return;
+			}
 
-                fetch(webAppUrl, { method: 'POST', mode: 'no-cors', body: formData })
-                .then(() => {
-                    alert("업로드 완료! 홈페이지 관리 DB 시트와 구글 드라이브 폴더를 확인해 보세요.");
-                    form.reset();
-                    btn.innerText = "구글 드라이브에 업로드 및 홈페이지 반영";
-                    btn.disabled = false;
-                }).catch(err => {
-                    alert("오류가 발생했습니다.");
-                    btn.disabled = false;
-                });
-            };
-            reader.readAsDataURL(file);
-        }
-    </script>
+			const file = document.getElementById("file").files[0];
+			if (!file) {
+				alert("사진 파일을 첨부해 주세요.");
+				return;
+			}
+			if (file.size > 5 * 1024 * 1024) {
+				alert("파일 용량이 너무 큽니다. 5MB 이하 파일을 업로드해 주세요.");
+				return;
+			}
+
+			setBtnState("업로드 중... (창을 닫지 마세요)", true);
+
+			try {
+				const base64Data = await fileToBase64(file);
+				const formData = new FormData();
+				formData.append("section", document.getElementById("section").value);
+				formData.append("title", document.getElementById("title").value.trim());
+				formData.append("desc", document.getElementById("desc").value.trim());
+				formData.append("fileData", base64Data);
+				formData.append("fileName", file.name);
+				formData.append("mimeType", file.type);
+
+				const response = await fetch(webAppUrl, { method: "POST", body: formData });
+
+				if (!response.ok) {
+					const raw = await response.text();
+					throw new Error(`HTTP ${response.status}: ${raw}`);
+				}
+
+				const raw = await response.text();
+				let result;
+				try {
+					result = raw ? JSON.parse(raw) : {};
+				} catch {
+					result = { success: true };
+				}
+
+				if (result.success === false) {
+					throw new Error(result.message || "서버 처리 실패");
+				}
+
+				alert("업로드 완료! 홈페이지 관리 DB 시트와 구글 드라이브 폴더를 확인해 보세요.");
+				form.reset();
+			} catch (err) {
+				console.error("업로드 오류:", err);
+				alert("오류가 발생했습니다. 네트워크/GAS 권한/배포 상태를 확인해 주세요.");
+			} finally {
+				setBtnState("구글 드라이브에 업로드 및 홈페이지 반영", false);
+			}
+		});
+	</script>
 </body>
 </html>
