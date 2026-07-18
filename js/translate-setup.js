@@ -4,19 +4,35 @@
 	const STORAGE_KEY = 'jb-design-language';
 	const SCRIPT_ID = 'google-translate-script';
 	const SUPPORTED_LANGS = ['ko', 'en', 'vi', 'ja', 'zh-CN'];
+	const DEFAULT_LANG = 'ko';
 
 	let translateReadyPromise = null;
+	let widgetInitialized = false;
 
 	// Google callback 은 전역 함수여야 합니다.
 	window.googleTranslateElementInit = function () {
+		if (widgetInitialized) {
+			if (typeof window.__jbTranslateReadyResolve === 'function') {
+				window.__jbTranslateReadyResolve();
+				window.__jbTranslateReadyResolve = null;
+			}
+			return;
+		}
+
+		if (!window.google || !google.translate || !google.translate.TranslateElement) {
+			return;
+		}
+
 		new google.translate.TranslateElement(
 			{
-				pageLanguage: 'ko',
+				pageLanguage: DEFAULT_LANG,
 				includedLanguages: SUPPORTED_LANGS.join(','),
 				autoDisplay: false
 			},
 			'google_translate_element'
 		);
+
+		widgetInitialized = true;
 
 		// 내부 resolve 훅이 있으면 실행
 		if (typeof window.__jbTranslateReadyResolve === 'function') {
@@ -27,7 +43,7 @@
 
 	function getSavedLanguage() {
 		const saved = localStorage.getItem(STORAGE_KEY);
-		return SUPPORTED_LANGS.includes(saved) ? saved : 'ko';
+		return SUPPORTED_LANGS.includes(saved) ? saved : DEFAULT_LANG;
 	}
 
 	function setSavedLanguage(lang) {
@@ -40,6 +56,16 @@
 		document.querySelectorAll('.language-btn').forEach((btn) => {
 			btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
 		});
+	}
+
+	function isCurrentGoogleLang(lang) {
+		if (lang === DEFAULT_LANG) {
+			return !document.cookie.includes('googtrans');
+		}
+		return (
+			document.cookie.includes(`/ko/${lang}`) ||
+			document.cookie.includes(`/auto/${lang}`)
+		);
 	}
 
 	function ensureGoogleTranslateLoaded() {
@@ -87,8 +113,10 @@
 		});
 	}
 
-	async function applyLanguage(lang) {
-		if (lang === 'ko') {
+	async function applyLanguage(lang, options = {}) {
+		const { force = false } = options;
+
+		if (lang === DEFAULT_LANG) {
 			// 한글 기본 페이지로 복귀
 			if (location.search.includes('googtrans') || document.cookie.includes('googtrans')) {
 				location.href = location.pathname;
@@ -96,10 +124,17 @@
 			return;
 		}
 
+		if (!force && isCurrentGoogleLang(lang)) {
+			return;
+		}
+
 		await ensureGoogleTranslateLoaded();
 		const combo = await waitForCombo();
-		combo.value = lang;
-		combo.dispatchEvent(new Event('change'));
+
+		if (combo.value !== lang) {
+			combo.value = lang;
+			combo.dispatchEvent(new Event('change'));
+		}
 	}
 
 	function bindLanguageButtons() {
@@ -109,12 +144,12 @@
 		buttons.forEach((button) => {
 			button.addEventListener('click', async (e) => {
 				e.preventDefault();
-				const lang = button.getAttribute('data-lang') || 'ko';
+				const lang = button.getAttribute('data-lang') || DEFAULT_LANG;
 				setSavedLanguage(lang);
 				setActiveButton(lang);
 
 				try {
-					await applyLanguage(lang);
+					await applyLanguage(lang, { force: true });
 				} catch (err) {
 					console.error('[i18n] language apply failed:', err);
 				}
@@ -128,7 +163,7 @@
 		const savedLang = getSavedLanguage();
 		setActiveButton(savedLang);
 
-		if (savedLang !== 'ko') {
+		if (savedLang !== DEFAULT_LANG) {
 			try {
 				await applyLanguage(savedLang);
 			} catch (err) {
