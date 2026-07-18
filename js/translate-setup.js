@@ -72,7 +72,7 @@
 			document.cookie = `googtrans=;expires=${expire};path=/${domainAttr}`;
 		});
 
-		location.href = location.pathname;
+		location.replace(location.pathname);
 	}
 
 	function ensureGoogleTranslateLoaded() {
