@@ -38,8 +38,59 @@
 
 	function setActiveButton(lang) {
 		document.querySelectorAll('.language-btn').forEach((btn) => {
-			btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+			const isActive = btn.getAttribute('data-lang') === lang;
+			btn.classList.toggle('active', isActive);
+			btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
 		});
+	}
+
+	function ensureTranslateContainer() {
+		let container = document.getElementById('google_translate_element');
+		if (!container) {
+			container = document.createElement('div');
+			container.id = 'google_translate_element';
+			container.setAttribute('aria-hidden', 'true');
+			document.body.appendChild(container);
+		}
+
+		container.style.position = 'absolute';
+		container.style.left = '-9999px';
+		container.style.width = '1px';
+		container.style.height = '1px';
+		container.style.overflow = 'hidden';
+		container.style.clipPath = 'inset(50%)';
+		container.style.whiteSpace = 'nowrap';
+		container.setAttribute('aria-hidden', 'true');
+	}
+
+	function getCookieValue(name) {
+		const prefix = `${name}=`;
+		const target = document.cookie
+			.split(';')
+			.map((part) => part.trim())
+			.find((part) => part.startsWith(prefix));
+
+		return target ? target.substring(prefix.length) : '';
+	}
+
+	function hasGoogleTranslateCookie() {
+		return getCookieValue('googtrans') !== '';
+	}
+
+	function restoreKoreanState() {
+		const host = location.hostname;
+		const expire = 'Thu, 01 Jan 1970 00:00:00 GMT';
+		const domains = [''];
+		// FQDN 형태의 호스트에서만 domain 속성을 포함해 쿠키를 함께 제거합니다.
+		if (/^(?:[a-z0-9-]+\.)+[a-z0-9-]+$/i.test(host)) {
+			domains.push(`;domain=${host}`, `;domain=.${host}`);
+		}
+
+		domains.forEach((domainAttr) => {
+			document.cookie = `googtrans=;expires=${expire};path=/${domainAttr}`;
+		});
+
+		location.replace(location.pathname);
 	}
 
 	function ensureGoogleTranslateLoaded() {
@@ -90,8 +141,8 @@
 	async function applyLanguage(lang) {
 		if (lang === 'ko') {
 			// 한글 기본 페이지로 복귀
-			if (location.search.includes('googtrans') || document.cookie.includes('googtrans')) {
-				location.href = location.pathname;
+			if (location.search.includes('googtrans') || hasGoogleTranslateCookie()) {
+				restoreKoreanState();
 			}
 			return;
 		}
@@ -123,6 +174,7 @@
 	}
 
 	async function init() {
+		ensureTranslateContainer();
 		bindLanguageButtons();
 
 		const savedLang = getSavedLanguage();
