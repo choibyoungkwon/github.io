@@ -101,12 +101,12 @@
         <div class="nav-links">
             <a href="index.html">Home</a>
             <!-- 언어 선택 버튼 -->
-            <div class="language-selector">
-                <button class="language-btn active" data-lang="ko">한글</button>
-                <button class="language-btn" data-lang="en">English</button>
-                <button class="language-btn" data-lang="vi">Tiếng Việt</button>
-                <button class="language-btn" data-lang="ja">日本語</button>
-                <button class="language-btn" data-lang="zh-CN">中文</button>
+            <div class="language-selector notranslate" translate="no">
+                <button class="language-btn active" data-lang="ko" translate="no">한글</button>
+                <button class="language-btn" data-lang="en" translate="no">English</button>
+                <button class="language-btn" data-lang="vi" translate="no">Tiếng Việt</button>
+                <button class="language-btn" data-lang="ja" translate="no">日本語</button>
+                <button class="language-btn" data-lang="zh-CN" translate="no">中文</button>
             </div>
         </div>
     </nav>
@@ -209,7 +209,7 @@
     </div>
 
     <!-- 숨겨진 Google Translate 요소 -->
-    <div id="google_translate_element" style="display:none;"></div>
+    <div id="google_translate_element" style="position:absolute;top:-9999px;left:-9999px;visibility:hidden;"></div>
 
     <script>
         // ⚠️ 이전에 사용하신 마스터 웹 앱 URL을 반드시 아래에 넣어주세요!
