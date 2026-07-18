@@ -346,6 +346,30 @@
 		});
 	}
 
+	function getCookieValue(name) {
+		const cookies = document.cookie ? document.cookie.split('; ') : [];
+		const prefix = `${name}=`;
+
+		for (const cookie of cookies) {
+			if (cookie.startsWith(prefix)) {
+				return decodeURIComponent(cookie.slice(prefix.length));
+			}
+		}
+
+		return '';
+	}
+
+	function hasGoogtransQueryParam(search) {
+		if (!search) return false;
+		return new URLSearchParams(search).has('googtrans');
+	}
+
+	function hasGoogtransHashParam(hash) {
+		if (!hash) return false;
+		const normalized = hash.replace(/^#/, '').replace(/^\?/, '');
+		return normalized ? new URLSearchParams(normalized).has('googtrans') : false;
+	}
+
 	function notifyLanguageChange(lang) {
 		currentLanguage = lang;
 		document.documentElement.lang = lang;
@@ -361,9 +385,9 @@
 	function hasActiveTranslationState() {
 		const combo = document.querySelector('.goog-te-combo');
 		return (
-			location.search.includes('googtrans=') ||
-			location.hash.includes('googtrans=') ||
-			document.cookie.includes('googtrans=') ||
+			hasGoogtransQueryParam(location.search) ||
+			hasGoogtransHashParam(location.hash) ||
+			Boolean(getCookieValue('googtrans')) ||
 			(combo && combo.value && combo.value !== SOURCE_LANGUAGE)
 		);
 	}
@@ -379,7 +403,7 @@
 			return;
 		}
 
-		document.cookie = `googtrans=/${SOURCE_LANGUAGE}/${lang}; path=/; SameSite=Lax${
+		document.cookie = `googtrans=${encodeURIComponent(`/${SOURCE_LANGUAGE}/${lang}`)}; path=/; SameSite=Lax${
 			window.location.protocol === 'https:' ? '; Secure' : ''
 		}`;
 		await ensureGoogleTranslateLoaded();
