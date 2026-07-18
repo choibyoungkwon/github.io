@@ -51,7 +51,6 @@
 
 			.login-btn:hover { background: #333; }
 
-			/* 언어 선택 버튼 */
 			.language-selector {
 				display: flex;
 				gap: 8px;
@@ -83,7 +82,6 @@
 				border-color: #111;
 			}
 
-			/* 메인 히어로 섹션 */
 			.hero {
 				position: relative;
 				width: 100%;
@@ -140,7 +138,30 @@
 
 			.btn:hover { background: #eee; }
 
-			/* 신뢰도/지표 섹션 */
+			.about-section {
+				padding: 70px 20px;
+				background: #fff;
+				border-bottom: 1px solid #eaeaea;
+			}
+
+			.about-inner {
+				max-width: 1000px;
+				margin: 0 auto;
+				text-align: center;
+			}
+
+			.about-inner h2 {
+				font-size: 32px;
+				font-weight: 800;
+				margin-bottom: 16px;
+			}
+
+			.about-inner p {
+				color: #555;
+				line-height: 1.8;
+				font-size: 16px;
+			}
+
 			.stats {
 				display: flex;
 				justify-content: space-evenly;
@@ -163,7 +184,6 @@
 				font-weight: 500;
 			}
 
-			/* 포트폴리오 그리드 섹션 */
 			.portfolio-section {
 				padding: 80px 50px;
 				max-width: 1400px;
@@ -235,7 +255,6 @@
 				line-height: 1.4;
 			}
 
-			/* 푸터 */
 			.footer {
 				background: #111;
 				color: #fff;
@@ -283,7 +302,6 @@
 				margin-top: 20px;
 			}
 
-			/* 모바일 대응 */
 			@media (max-width: 768px) {
 				.navbar {
 					padding: 15px 20px;
@@ -313,15 +331,14 @@
 		</style>
 	</head>
 	<body>
-		<!-- 상단 네비게이션 -->
 		<nav class="navbar">
-			<div class="logo">
+			<a href="index.html" class="logo">
 				<img
 					src="https://drive.google.com/thumbnail?id=1-qDwfz9rv8F7Hdq9pANFwhZNbfRLVvPR&sz=w1000"
 					class="logo-img"
 				/>
 				JB DESIGN
-			</div>
+			</a>
 			<div class="nav-links">
 				<a href="#about">About</a>
 				<a href="#portfolio">Office & Commercial</a>
@@ -330,7 +347,6 @@
 				<a href="JBdesign_order.html">Order (주문/결제)</a>
 				<a href="login.html" class="login-btn">Login</a>
 
-				<!-- 언어 선택 버튼 -->
 				<div class="language-selector">
 					<button class="language-btn active" data-lang="ko">한글</button>
 					<button class="language-btn" data-lang="en">English</button>
@@ -341,7 +357,6 @@
 			</div>
 		</nav>
 
-		<!-- 메인 히어로 섹션 -->
 		<div class="hero">
 			<div class="hero-content">
 				<h1>공간의 본질에<br />기능과 가치를 더하다</h1>
@@ -353,7 +368,16 @@
 			</div>
 		</div>
 
-		<!-- 신뢰도 섹션 -->
+		<section class="about-section" id="about">
+			<div class="about-inner">
+				<h2>About JB Design</h2>
+				<p>
+					JB Design은 상업·오피스·주거 공간의 기획부터 시공까지 전 과정을 담당합니다.
+					공간의 미학과 실용성을 함께 고려한 설계로 고객의 비즈니스 성과와 일상 만족도를 높이는 것을 목표로 합니다.
+				</p>
+			</div>
+		</section>
+
 		<div class="stats">
 			<div class="stat-item">
 				<h3>Smart Health Simple Life</h3>
@@ -369,7 +393,6 @@
 			</div>
 		</div>
 
-		<!-- 포트폴리오 섹션 -->
 		<div class="portfolio-section" id="portfolio">
 			<div class="section-header">
 				<h2 class="section-title">Explore Our Projects</h2>
@@ -383,61 +406,38 @@
 
 			<div class="grid">
 				<div class="card">
-					<div
-						class="card-img"
-						style="background: url('사진경로1_오피스.jpg') center/cover; background-color: #ddd;"
-					></div>
+					<div class="card-img" style="background: url('사진경로1_오피스.jpg') center/cover; background-color: #ddd;"></div>
 					<div class="card-title">Pearl Tower 16F 워크스페이스</div>
 					<div class="card-desc">
-						Ho Chi Minh City · 175㎡ 레이아웃 및 EI60 방화 도어 적용
-						오피스 핏아웃
+						Ho Chi Minh City · 175㎡ 레이아웃 및 EI60 방화 도어 적용 오피스 핏아웃
 					</div>
 				</div>
 
 				<div class="card">
-					<div
-						class="card-img"
-						style="background: url('사진경로2_오피스.jpg') center/cover; background-color: #ccc;"
-					></div>
+					<div class="card-img" style="background: url('사진경로2_오피스.jpg') center/cover; background-color: #ccc;"></div>
 					<div class="card-title">WJ Food 베트남 법인 오피스</div>
-					<div class="card-desc">
-						네트워크 인프라 구축 및 기업 맞춤형 스마트 오피스 시공
-					</div>
+					<div class="card-desc">네트워크 인프라 구축 및 기업 맞춤형 스마트 오피스 시공</div>
 				</div>
 
 				<div class="card">
-					<div
-						class="card-img"
-						style="background: url('사진경로3_레지던스.jpg') center/cover; background-color: #eee;"
-					></div>
+					<div class="card-img" style="background: url('사진경로3_레지던스.jpg') center/cover; background-color: #eee;"></div>
 					<div class="card-title">Lumière Midtown 레지던스</div>
-					<div class="card-desc">
-						프리미엄 주거 공간 리노베이션 및 맞춤형 가구 제작
-					</div>
+					<div class="card-desc">프리미엄 주거 공간 리노베이션 및 맞춤형 가구 제작</div>
 				</div>
 
 				<div class="card">
-					<div
-						class="card-img"
-						style="background: url('사진경로4_오피스.jpg') center/cover; background-color: #d5d5d5;"
-					></div>
+					<div class="card-img" style="background: url('사진경로4_오피스.jpg') center/cover; background-color: #d5d5d5;"></div>
 					<div class="card-title">하노이 77㎡ 콤팩트 오피스</div>
-					<div class="card-desc">
-						Hanoi · 공간 효율을 극대화한 임원실 및 팬트리 맞춤 설계
-					</div>
+					<div class="card-desc">Hanoi · 공간 효율을 극대화한 임원실 및 팬트리 맞춤 설계</div>
 				</div>
 			</div>
 		</div>
 
-		<!-- 푸터 -->
 		<footer class="footer" id="contact">
 			<div class="footer-cols">
 				<div class="footer-col">
 					<h4>JB DESIGN</h4>
-					<p>
-						호치민 및 하노이 기반 프리미엄 인테리어<br />상업, 주거
-						공간 기획 및 시공 전문 기업
-					</p>
+					<p>호치민 및 하노이 기반 프리미엄 인테리어<br />상업, 주거 공간 기획 및 시공 전문 기업</p>
 				</div>
 				<div class="footer-col">
 					<h4>Expertise</h4>
@@ -452,15 +452,23 @@
 					<a href="#">유지보수 안내</a>
 				</div>
 			</div>
-			<div class="footer-bottom">
-				© 2026 JB DESIGN. All rights reserved.
-			</div>
+			<div class="footer-bottom">© 2026 JB DESIGN. All rights reserved.</div>
 		</footer>
 
-		<!-- 숨겨진 Google Translate 요소 -->
 		<div id="google_translate_element" style="display:none;"></div>
-
-		<!-- 공유 번역 스크립트 로드 -->
 		<script src="js/translate-setup.js"></script>
+		<script>
+			window.addEventListener("error", function (e) {
+				if (
+					e &&
+					e.target &&
+					e.target.tagName === "SCRIPT" &&
+					e.target.src &&
+					e.target.src.includes("translate-setup.js")
+				) {
+					console.warn("translate-setup.js 로드 실패:", e.target.src);
+				}
+			}, true);
+		</script>
 	</body>
 </html>
