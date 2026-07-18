@@ -1,9 +1,10 @@
 // 다국어 번역 설정 - 모든 페이지에서 공유하는 스크립트
 
 (function () {
+	const SOURCE_LANGUAGE = 'ko';
 	const STORAGE_KEY = 'jb-design-language';
 	const SCRIPT_ID = 'google-translate-script';
-	const SUPPORTED_LANGS = ['ko', 'en', 'vi', 'ja', 'zh-CN'];
+	const SUPPORTED_LANGS = [SOURCE_LANGUAGE, 'en', 'vi', 'ja', 'zh-CN'];
 	const TRANSLATE_ELEMENT_ID = 'google_translate_element';
 	const MANUAL_TRANSLATIONS = {
 		'아이디 입력': {
@@ -184,7 +185,7 @@
 
 	let translateReadyPromise = null;
 	let translateInitialized = false;
-	let currentLanguage = 'ko';
+	let currentLanguage = SOURCE_LANGUAGE;
 
 	// Google callback 은 전역 함수여야 합니다.
 	window.googleTranslateElementInit = function () {
@@ -193,7 +194,7 @@
 		if (!translateInitialized) {
 			new google.translate.TranslateElement(
 				{
-					pageLanguage: 'ko',
+					pageLanguage: SOURCE_LANGUAGE,
 					includedLanguages: SUPPORTED_LANGS.join(','),
 					autoDisplay: false
 				},
@@ -211,7 +212,7 @@
 
 	function getSavedLanguage() {
 		const saved = localStorage.getItem(STORAGE_KEY);
-		return SUPPORTED_LANGS.includes(saved) ? saved : 'ko';
+		return SUPPORTED_LANGS.includes(saved) ? saved : SOURCE_LANGUAGE;
 	}
 
 	function setSavedLanguage(lang) {
@@ -220,8 +221,8 @@
 		}
 	}
 
-	function translateText(text, lang = currentLanguage) {
-		if (!text || lang === 'ko') return text;
+	function translateText(text, lang = currentLanguage || SOURCE_LANGUAGE) {
+		if (!text || lang === SOURCE_LANGUAGE) return text;
 		const entry = MANUAL_TRANSLATIONS[text];
 		return (entry && entry[lang]) || text;
 	}
@@ -343,9 +344,6 @@
 				clearCookie('googtrans', path, domain);
 			});
 		});
-
-		localStorage.setItem(STORAGE_KEY, 'ko');
-		document.documentElement.lang = 'ko';
 	}
 
 	function notifyLanguageChange(lang) {
@@ -366,12 +364,12 @@
 			location.search.includes('googtrans=') ||
 			location.hash.includes('googtrans=') ||
 			document.cookie.includes('googtrans=') ||
-			(combo && combo.value && combo.value !== 'ko')
+			(combo && combo.value && combo.value !== SOURCE_LANGUAGE)
 		);
 	}
 
 	async function applyLanguage(lang) {
-		if (lang === 'ko') {
+		if (lang === SOURCE_LANGUAGE) {
 			const shouldReload = hasActiveTranslationState();
 			clearGoogleTranslateState();
 			if (shouldReload) {
@@ -381,7 +379,7 @@
 			return;
 		}
 
-		document.cookie = `googtrans=/ko/${lang}; path=/; SameSite=Lax${
+		document.cookie = `googtrans=/${SOURCE_LANGUAGE}/${lang}; path=/; SameSite=Lax${
 			window.location.protocol === 'https:' ? '; Secure' : ''
 		}`;
 		await ensureGoogleTranslateLoaded();
@@ -397,7 +395,7 @@
 		buttons.forEach((button) => {
 			button.addEventListener('click', async (e) => {
 				e.preventDefault();
-				const lang = button.getAttribute('data-lang') || 'ko';
+				const lang = button.getAttribute('data-lang') || SOURCE_LANGUAGE;
 				setSavedLanguage(lang);
 				notifyLanguageChange(lang);
 
@@ -417,7 +415,7 @@
 		const savedLang = getSavedLanguage();
 		notifyLanguageChange(savedLang);
 
-		if (savedLang !== 'ko') {
+		if (savedLang !== SOURCE_LANGUAGE) {
 			try {
 				await applyLanguage(savedLang);
 			} catch (err) {
