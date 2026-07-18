@@ -81,6 +81,7 @@
 		const host = location.hostname;
 		const expire = 'Thu, 01 Jan 1970 00:00:00 GMT';
 		const domains = [''];
+		// FQDN 형태의 호스트에서만 domain 속성을 포함해 쿠키를 함께 제거합니다.
 		if (/^(?:[a-z0-9-]+\.)+[a-z0-9-]+$/i.test(host)) {
 			domains.push(`;domain=${host}`, `;domain=.${host}`);
 		}

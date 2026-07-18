@@ -88,6 +88,16 @@
 				border-color: #111;
 			}
 
+			.translate-hidden {
+				position: absolute;
+				left: -9999px;
+				width: 1px;
+				height: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
 			/* 메인 컨테이너 */
 			.container {
 				flex: 1;
@@ -434,8 +444,8 @@
 		</script>
 		<div
 			id="google_translate_element"
+			class="translate-hidden"
 			aria-hidden="true"
-			style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;"
 		></div>
 		<script src="js/translate-setup.js"></script>
 	</body>
