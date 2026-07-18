@@ -89,8 +89,21 @@
 
 	async function applyLanguage(lang) {
 		if (lang === 'ko') {
-			// 한글 기본 페이지로 복귀
-			if (location.search.includes('googtrans') || document.cookie.includes('googtrans')) {
+			// 한글 기본 페이지로 복귀: 쿠키 삭제 후 페이지 새로고침
+			const combo = document.querySelector('.goog-te-combo');
+			const wasTranslated =
+				(combo && combo.value && combo.value !== 'ko') ||
+				document.cookie.split(';').some((c) => c.trim().startsWith('googtrans=') && c.includes('/'));
+
+			// googtrans 쿠키 제거 (현재 도메인과 상위 도메인 모두)
+			const hostname = window.location.hostname;
+			document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+			document.cookie =
+				'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + hostname;
+			document.cookie =
+				'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.' + hostname;
+
+			if (wasTranslated) {
 				location.href = location.pathname;
 			}
 			return;
