@@ -242,6 +242,43 @@
 				.container {
 					padding: 20px;
 				}
+
+				.language-selector {
+					margin-left: 0;
+					width: 100%;
+					justify-content: center;
+				}
+			}
+
+			/* 언어 선택 버튼 */
+			.language-selector {
+				display: flex;
+				gap: 6px;
+				align-items: center;
+				margin-left: auto;
+			}
+
+			.language-btn {
+				padding: 5px 10px;
+				border: 1px solid #ddd;
+				background: #fff;
+				border-radius: 4px;
+				cursor: pointer;
+				font-size: 12px;
+				font-weight: 600;
+				transition: all 0.3s ease;
+				color: #111;
+			}
+
+			.language-btn:hover {
+				border-color: #111;
+				background: #f5f5f5;
+			}
+
+			.language-btn.active {
+				background: #111;
+				color: #fff;
+				border-color: #111;
 			}
 		</style>
 	</head>
@@ -255,6 +292,14 @@
 				/>
 				JB DESIGN
 			</a>
+			<!-- 언어 선택 버튼 -->
+			<div class="language-selector notranslate" translate="no">
+				<button class="language-btn active" data-lang="ko" translate="no">한글</button>
+				<button class="language-btn" data-lang="en" translate="no">English</button>
+				<button class="language-btn" data-lang="vi" translate="no">Tiếng Việt</button>
+				<button class="language-btn" data-lang="ja" translate="no">日本語</button>
+				<button class="language-btn" data-lang="zh-CN" translate="no">中文</button>
+			</div>
 		</div>
 
 		<!-- 메인 컨테이너 -->
@@ -378,5 +423,11 @@
 				}
 			});
 		</script>
+
+		<!-- 숨겨진 Google Translate 요소 -->
+		<div id="google_translate_element" style="position:absolute;top:-9999px;left:-9999px;visibility:hidden;"></div>
+
+		<!-- 공유 번역 스크립트 로드 -->
+		<script src="js/translate-setup.js"></script>
 	</body>
 </html>

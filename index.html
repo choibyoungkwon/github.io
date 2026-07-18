@@ -331,12 +331,12 @@
 				<a href="login.html" class="login-btn">Login</a>
 
 				<!-- 언어 선택 버튼 -->
-				<div class="language-selector">
-					<button class="language-btn active" data-lang="ko">한글</button>
-					<button class="language-btn" data-lang="en">English</button>
-					<button class="language-btn" data-lang="vi">Tiếng Việt</button>
-					<button class="language-btn" data-lang="ja">日本語</button>
-					<button class="language-btn" data-lang="zh-CN">中文</button>
+				<div class="language-selector notranslate" translate="no">
+					<button class="language-btn active" data-lang="ko" translate="no">한글</button>
+					<button class="language-btn" data-lang="en" translate="no">English</button>
+					<button class="language-btn" data-lang="vi" translate="no">Tiếng Việt</button>
+					<button class="language-btn" data-lang="ja" translate="no">日本語</button>
+					<button class="language-btn" data-lang="zh-CN" translate="no">中文</button>
 				</div>
 			</div>
 		</nav>
@@ -458,7 +458,7 @@
 		</footer>
 
 		<!-- 숨겨진 Google Translate 요소 -->
-		<div id="google_translate_element" style="display:none;"></div>
+		<div id="google_translate_element" style="position:absolute;top:-9999px;left:-9999px;visibility:hidden;"></div>
 
 		<!-- 공유 번역 스크립트 로드 -->
 		<script src="js/translate-setup.js"></script>
