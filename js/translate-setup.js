@@ -63,10 +63,27 @@
 		container.setAttribute('aria-hidden', 'true');
 	}
 
+	function getCookieValue(name) {
+		const prefix = `${name}=`;
+		const target = document.cookie
+			.split(';')
+			.map((part) => part.trim())
+			.find((part) => part.startsWith(prefix));
+
+		return target ? target.substring(prefix.length) : '';
+	}
+
+	function hasGoogleTranslateCookie() {
+		return getCookieValue('googtrans') !== '';
+	}
+
 	function restoreKoreanState() {
 		const host = location.hostname;
 		const expire = 'Thu, 01 Jan 1970 00:00:00 GMT';
-		const domains = ['', `;domain=${host}`, `;domain=.${host}`];
+		const domains = [''];
+		if (/^(?:[a-z0-9-]+\.)+[a-z0-9-]+$/i.test(host)) {
+			domains.push(`;domain=${host}`, `;domain=.${host}`);
+		}
 
 		domains.forEach((domainAttr) => {
 			document.cookie = `googtrans=;expires=${expire};path=/${domainAttr}`;
@@ -123,7 +140,7 @@
 	async function applyLanguage(lang) {
 		if (lang === 'ko') {
 			// 한글 기본 페이지로 복귀
-			if (location.search.includes('googtrans') || document.cookie.includes('googtrans=')) {
+			if (location.search.includes('googtrans') || hasGoogleTranslateCookie()) {
 				restoreKoreanState();
 			}
 			return;
