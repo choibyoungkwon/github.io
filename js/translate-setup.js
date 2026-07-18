@@ -403,7 +403,9 @@
 			return;
 		}
 
-		document.cookie = `googtrans=${encodeURIComponent(`/${SOURCE_LANGUAGE}/${lang}`)}; path=/; SameSite=Lax${
+		document.cookie = `googtrans=${encodeURIComponent(
+			`/${SOURCE_LANGUAGE}/${lang}`
+		)}; path=/; Max-Age=31536000; SameSite=Lax${
 			window.location.protocol === 'https:' ? '; Secure' : ''
 		}`;
 		await ensureGoogleTranslateLoaded();
