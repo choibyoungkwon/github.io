@@ -314,7 +314,7 @@
 	</head>
 	<body>
 		<!-- 상단 네비게이션 -->
-		<nav class="navbar">
+		<nav class="navbar notranslate" translate="no">
 			<div class="logo">
 				<img
 					src="https://drive.google.com/thumbnail?id=1-qDwfz9rv8F7Hdq9pANFwhZNbfRLVvPR&sz=w1000"
@@ -327,16 +327,16 @@
 				<a href="#portfolio">Office & Commercial</a>
 				<a href="#portfolio">Residential</a>
 				<a href="#contact">Contact</a>
-				<a href="JBdesign_order.html">Order (주문/결제)</a>
+				<a href="JBdesign_order.html">Order</a>
 				<a href="login.html" class="login-btn">Login</a>
 
 				<!-- 언어 선택 버튼 -->
 				<div class="language-selector">
-					<button class="language-btn active" data-lang="ko">한글</button>
+					<button class="language-btn active" data-lang="ko">Korean</button>
 					<button class="language-btn" data-lang="en">English</button>
-					<button class="language-btn" data-lang="vi">Tiếng Việt</button>
-					<button class="language-btn" data-lang="ja">日本語</button>
-					<button class="language-btn" data-lang="zh-CN">中文</button>
+					<button class="language-btn" data-lang="vi">Vietnamese</button>
+					<button class="language-btn" data-lang="ja">Japanese</button>
+					<button class="language-btn" data-lang="zh-CN">Chinese</button>
 				</div>
 			</div>
 		</nav>
@@ -356,15 +356,15 @@
 		<!-- 신뢰도 섹션 -->
 		<div class="stats">
 			<div class="stat-item">
-				<h3>Smart Health Simple Life</h3>
+				<h3 class="notranslate" translate="no">Smart Health Simple Life</h3>
 				<p>건강하게 그리고 편리하게</p>
 			</div>
 			<div class="stat-item">
-				<h3>Premium</h3>
+				<h3 class="notranslate" translate="no">Premium</h3>
 				<p>하이엔드 자재 및 마감 적용</p>
 			</div>
 			<div class="stat-item">
-				<h3>Smart Layout</h3>
+				<h3 class="notranslate" translate="no">Smart Layout</h3>
 				<p>효율적인 동선 및 3D 렌더링 컨설팅</p>
 			</div>
 		</div>
@@ -372,8 +372,8 @@
 		<!-- 포트폴리오 섹션 -->
 		<div class="portfolio-section" id="portfolio">
 			<div class="section-header">
-				<h2 class="section-title">Explore Our Projects</h2>
-				<div class="tabs">
+				<h2 class="section-title notranslate" translate="no">Explore Our Projects</h2>
+				<div class="tabs notranslate" translate="no">
 					<button class="active">All</button>
 					<button>Office</button>
 					<button>Commercial</button>
@@ -387,9 +387,13 @@
 						class="card-img"
 						style="background: url('사진경로1_오피스.jpg') center/cover; background-color: #ddd;"
 					></div>
-					<div class="card-title">Pearl Tower 16F 워크스페이스</div>
+					<div class="card-title">
+						<span class="notranslate" translate="no">Pearl Tower 16F</span>
+						워크스페이스
+					</div>
 					<div class="card-desc">
-						Ho Chi Minh City · 175㎡ 레이아웃 및 EI60 방화 도어 적용
+						<span class="notranslate" translate="no">Ho Chi Minh City</span>
+						· 175㎡ 레이아웃 및 EI60 방화 도어 적용
 						오피스 핏아웃
 					</div>
 				</div>
@@ -399,7 +403,10 @@
 						class="card-img"
 						style="background: url('사진경로2_오피스.jpg') center/cover; background-color: #ccc;"
 					></div>
-					<div class="card-title">WJ Food 베트남 법인 오피스</div>
+					<div class="card-title">
+						<span class="notranslate" translate="no">WJ Food</span>
+						베트남 법인 오피스
+					</div>
 					<div class="card-desc">
 						네트워크 인프라 구축 및 기업 맞춤형 스마트 오피스 시공
 					</div>
@@ -410,7 +417,10 @@
 						class="card-img"
 						style="background: url('사진경로3_레지던스.jpg') center/cover; background-color: #eee;"
 					></div>
-					<div class="card-title">Lumière Midtown 레지던스</div>
+					<div class="card-title">
+						<span class="notranslate" translate="no">Lumière Midtown</span>
+						레지던스
+					</div>
 					<div class="card-desc">
 						프리미엄 주거 공간 리노베이션 및 맞춤형 가구 제작
 					</div>
@@ -423,7 +433,8 @@
 					></div>
 					<div class="card-title">하노이 77㎡ 콤팩트 오피스</div>
 					<div class="card-desc">
-						Hanoi · 공간 효율을 극대화한 임원실 및 팬트리 맞춤 설계
+						<span class="notranslate" translate="no">Hanoi</span>
+						· 공간 효율을 극대화한 임원실 및 팬트리 맞춤 설계
 					</div>
 				</div>
 			</div>
@@ -433,32 +444,46 @@
 		<footer class="footer" id="contact">
 			<div class="footer-cols">
 				<div class="footer-col">
-					<h4>JB DESIGN</h4>
+					<h4 class="notranslate" translate="no">JB DESIGN</h4>
 					<p>
 						호치민 및 하노이 기반 프리미엄 인테리어<br />상업, 주거
 						공간 기획 및 시공 전문 기업
 					</p>
 				</div>
 				<div class="footer-col">
-					<h4>Expertise</h4>
-					<a href="#">오피스 핏아웃 (Office Fit-out)</a>
-					<a href="#">상업 공간 (Commercial)</a>
-					<a href="#">레지던스 (Metropolis Thu Thiem 등)</a>
+					<h4 class="notranslate" translate="no">Expertise</h4>
+					<a href="#"
+						>오피스 핏아웃
+						<span class="notranslate" translate="no">(Office Fit-out)</span></a
+					>
+					<a href="#"
+						>상업 공간
+						<span class="notranslate" translate="no">(Commercial)</span></a
+					>
+					<a href="#"
+						>레지던스 (
+						<span class="notranslate" translate="no">Metropolis Thu Thiem</span>
+						등)</a
+					>
 				</div>
 				<div class="footer-col">
-					<h4>Support</h4>
+					<h4 class="notranslate" translate="no">Support</h4>
 					<a href="#">프로젝트 견적 문의</a>
 					<a href="#">소방/인허가 규정 컨설팅</a>
 					<a href="#">유지보수 안내</a>
 				</div>
 			</div>
-			<div class="footer-bottom">
+			<div class="footer-bottom notranslate" translate="no">
 				© 2026 JB DESIGN. All rights reserved.
 			</div>
 		</footer>
 
 		<!-- 숨겨진 Google Translate 요소 -->
-		<div id="google_translate_element" style="display:none;"></div>
+		<div
+			id="google_translate_element"
+			aria-hidden="true"
+			style="position:absolute;left:-9999px;top:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;"
+		></div>
 
 		<!-- 공유 번역 스크립트 로드 -->
 		<script src="js/translate-setup.js"></script>
