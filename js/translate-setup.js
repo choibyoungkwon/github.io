@@ -322,6 +322,9 @@
 
 	function clearCookie(name, path, domain) {
 		let cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=${path}; SameSite=Lax`;
+		if (window.location.protocol === 'https:') {
+			cookie += '; Secure';
+		}
 		if (domain) {
 			cookie += `; domain=${domain}`;
 		}
@@ -357,15 +360,30 @@
 		);
 	}
 
+	function hasActiveTranslationState() {
+		const combo = document.querySelector('.goog-te-combo');
+		return (
+			location.search.includes('googtrans=') ||
+			location.hash.includes('googtrans=') ||
+			document.cookie.includes('googtrans=') ||
+			(combo && combo.value && combo.value !== 'ko')
+		);
+	}
+
 	async function applyLanguage(lang) {
 		if (lang === 'ko') {
+			const shouldReload = hasActiveTranslationState();
 			clearGoogleTranslateState();
-			const cleanUrl = `${location.pathname}${location.search}${location.hash}`;
-			location.replace(cleanUrl);
+			if (shouldReload) {
+				const cleanUrl = `${location.pathname}${location.search}${location.hash}`;
+				location.replace(cleanUrl);
+			}
 			return;
 		}
 
-		document.cookie = `googtrans=/ko/${lang}; path=/; SameSite=Lax`;
+		document.cookie = `googtrans=/ko/${lang}; path=/; SameSite=Lax${
+			window.location.protocol === 'https:' ? '; Secure' : ''
+		}`;
 		await ensureGoogleTranslateLoaded();
 		const combo = await waitForCombo();
 		combo.value = lang;
