@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JB Design | Architecture & Interiors</title>
+    <style>
+        /* 기본 스타일 */
+        body { font-family: 'Noto Sans KR', sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; color: #333; }
+        
+        /* 메인 배너 (Hero Section) */
+        #hero-section {
+            width: 100%; height: 60vh;
+            background-size: cover; background-position: center;
+            display: flex; align-items: center; justify-content: center;
+            color: white; text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+        }
+        #hero-section h1 { font-size: 3rem; margin: 0; }
+
+        /* 포트폴리오 갤러리 그리드 */
+        .container { max-width: 1200px; margin: 50px auto; padding: 0 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        
+        /* 썸네일 카드 */
+        .card { 
+            background: #fff; border-radius: 8px; overflow: hidden; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .card:hover { transform: translateY(-5px); }
+        .card img { width: 100%; height: 200px; object-fit: cover; }
+        .card-content { padding: 15px; }
+        .card-content h3 { margin: 0 0 10px 0; font-size: 1.2rem; }
+        .card-content p { margin: 0; color: #666; font-size: 0.9rem; }
+
+        /* 팝업 모달 (Lightbox) */
+        .modal {
+            display: none; position: fixed; z-index: 1000; left: 0; top: 0;
+            width: 100%; height: 100%; background-color: rgba(0,0,0,0.9);
+            overflow-y: auto; padding-top: 50px;
+        }
+        .modal-content {
+            background-color: #fff; margin: auto; padding: 30px;
+            width: 80%; max-width: 900px; border-radius: 8px; position: relative;
+        }
+        .close-btn {
+            position: absolute; right: 20px; top: 20px;
+            font-size: 30px; font-weight: bold; cursor: pointer; color: #333;
+        }
+        .modal-header h2 { margin-top: 0; border-bottom: 2px solid #111; padding-bottom: 10px; }
+        .modal-info { display: flex; gap: 20px; margin-bottom: 20px; color: #555; }
+        
+        /* 모달 안의 상세 갤러리 */
+        .gallery-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; margin-top: 20px;
+        }
+        .gallery-grid img {
+            width: 100%; border-radius: 4px; object-fit: cover; cursor: pointer;
+            transition: opacity 0.3s;
+        }
+        .gallery-grid img:hover { opacity: 0.8; }
+    </style>
+</head>
+<body>
+
+    <!-- 1. 메인 배너 영역 -->
+    <div id="hero-section" style="background-image: url('기본배경.jpg');">
+        <h1 id="hero-text">로딩 중...</h1>
+    </div>
+
+    <!-- 2. 포트폴리오 나열 영역 -->
+    <div class="container">
+        <h2>Our Projects</h2>
+        <div id="portfolio-grid" class="grid">
+            <!-- 자바스크립트가 여기에 썸네일을 자동으로 채워 넣습니다 -->
+            <p>포트폴리오 데이터를 불러오는 중입니다...</p>
+        </div>
+    </div>
+
+    <!-- 3. 상세 보기 팝업 (모달) 영역 -->
+    <div id="project-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div class="modal-header">
+                <h2 id="modal-title">프로젝트명</h2>
+            </div>
+            <div class="modal-info">
+                <p><strong>Location:</strong> <span id="modal-location"></span></p>
+                <p><strong>Area:</strong> <span id="modal-area"></span></p>
+            </div>
+            <p id="modal-desc" style="line-height: 1.6;"></p>
+            
+            <!-- 추가 사진들이 여기에 펼쳐집니다 -->
+            <div id="modal-gallery" class="gallery-grid"></div>
+        </div>
+    </div>
+
+    <script>
+        // 우리가 배포한 웹앱 URL (고정)
+        const webAppUrl = "https://script.google.com/macros/s/AKfycbw86csvjh83p32eBgHO3nSmrMBeTFbJB-AAfCinjE2xOD135YBCmToHSa5sWkC_pf/exec";
+
+        // 전체 데이터를 저장해둘 변수
+        let portfolioList = [];
+
+        // 페이지가 열리면 즉시 데이터 가져오기 실행
+        window.onload = async function() {
+            try {
+                // A. 배너 데이터 불러오기
+                const homeRes = await fetch(webAppUrl + "?sheet=홈페이지설정");
+                const homeData = await homeRes.json();
+                
+                // 배경화면 카테고리를 찾아 메인 화면에 적용
+                const heroData = homeData.find(item => item.section === "배경화면");
+                if (heroData) {
+                    document.getElementById("hero-section").style.backgroundImage = `url('${heroData.image}')`;
+                    document.getElementById("hero-text").innerText = heroData.title;
+                }
+
+                // B. 포트폴리오 데이터 불러오기
+                const portRes = await fetch(webAppUrl + "?sheet=Portfolio");
+                portfolioList = await portRes.json();
+                
+                renderPortfolio(portfolioList);
+
+            } catch (error) {
+                console.error("데이터 로드 에러:", error);
+                document.getElementById("portfolio-grid").innerHTML = "<p>데이터를 불러오지 못했습니다.</p>";
+            }
+        };
+
+        // 썸네일 그리드 그리기 함수
+        function renderPortfolio(dataArray) {
+            const grid = document.getElementById("portfolio-grid");
+            grid.innerHTML = ""; // 로딩 텍스트 지우기
+
+            dataArray.forEach((project, index) => {
+                // 구글 시트 1행의 제목(Header)을 정확히 적어야 합니다. 
+                // 예: 시트 제목이 'Title', 'Main Image', 'Location' 인 경우 (대소문자/띄어쓰기 주의)
+                const title = project["Title"] || project["제목"] || "Untitled";
+                const location = project["Location"] || project["위치"] || "";
+                const mainImg = project["Main Image"] || project["대표사진"] || project["J열 헤더이름입력"]; // 시트 헤더명에 맞게 수정 필요!
+
+                if (!mainImg) return; // 사진이 없는 빈 줄은 건너뜀
+
+                const cardHTML = `
+                    <div class="card" onclick="openModal(${index})">
+                        <img src="${mainImg}" alt="${title}">
+                        <div class="card-content">
+                            <h3>${title}</h3>
+                            <p>${location}</p>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += cardHTML;
+            });
+        }
+
+        // 모달창 열기 (클릭한 프로젝트의 인덱스 번호를 전달받음)
+        function openModal(index) {
+            const project = portfolioList[index];
+            
+            // 시트 헤더명에 맞게 데이터 연결
+            document.getElementById("modal-title").innerText = project["Title"] || project["제목"];
+            document.getElementById("modal-location").innerText = project["Location"] || project["위치"];
+            document.getElementById("modal-area").innerText = project["AreaSize"] || project["면적"] || project["Area Size"];
+            document.getElementById("modal-desc").innerText = project["Desc"] || project["설명"];
+
+            // 갤러리 이미지 처리 (대표사진 + 추가사진들)
+            const gallery = document.getElementById("modal-gallery");
+            gallery.innerHTML = ""; // 기존 사진 지우기
+
+            const mainImg = project["Main Image"] || project["대표사진"];
+            if(mainImg) gallery.innerHTML += `<img src="${mainImg}" alt="Main">`;
+
+            // N열에 콤마(,)로 구분되어 저장된 추가 사진들 파싱
+            const subImagesStr = project["Sub Images"] || project["추가사진"];
+            if (subImagesStr) {
+                const subImagesArray = subImagesStr.split(",");
+                subImagesArray.forEach(url => {
+                    if (url.trim() !== "") {
+                        gallery.innerHTML += `<img src="${url.trim()}" alt="Sub Image">`;
+                    }
+                });
+            }
+
+            // 모달 화면에 표시
+            document.getElementById("project-modal").style.display = "block";
+            document.body.style.overflow = "hidden"; // 배경 스크롤 방지
+        }
+
+        // 모달창 닫기
+        function closeModal() {
+            document.getElementById("project-modal").style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+    </script>
+</body>
+</html>
