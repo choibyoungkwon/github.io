@@ -411,36 +411,40 @@
 			</div>
 		</div>
 
-        <script>
-            const webAppUrl = "https://script.google.com/macros/s/AKfycbw86csvjh83p32eBgHO3nSmrMBeTFbYoVX-AAfCinjE2xOD135YBCmToHSa5sWkC_pf/exec?sheet=Portfolio";
-            let allData = [];
+        <div id="category-sections"></div>
 
-            fetch(webAppUrl)
-                .then(res => res.json())
-                .then(data => {
-                    allData = data;
-                    filterProjects('All');
-                });
+<script>
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbw86csvjh83p32eBgHO3nSmrMBeTFbYoVX-AAfCinjE2xOD135YBCmToHSa5sWkC_pf/exec?sheet=Portfolio";
 
-            function filterProjects(cat) {
-                const grid = document.getElementById("portfolio-grid");
-                grid.innerHTML = "";
-                const filtered = (cat === 'All') ? allData : allData.filter(p => p["Category (분류)"] === cat);
-                
-                filtered.forEach(p => {
-                    if (p["Is_Main_Display (메인노출)"] === true || p["Is_Main_Display (메인노출)"] === "TRUE") {
-                        grid.innerHTML += `
-                            <div class="card" onclick="location.href='detail.html?id=${p["Project_ID"]}'">
-                                <div class="card-img" style="background: url('${p["Main_Image (대표 이미지)"]}') center/cover; background-color: #ddd;"></div>
-                                <div class="card-title">${p["Project_Name (프로젝트명)"]}</div>
-                                <div class="card-desc">
-                                    ${p["Location (위치)"]} · ${p["Area_Size (면적)"]} <br> ${p["Short_Desc (요약 설명)"]}
-                                </div>
-                            </div>`;
-                    }
-                });
-            }
-        </script>
+    fetch(webAppUrl)
+        .then(res => res.json())
+        .then(data => {
+            const container = document.getElementById("category-sections");
+            const cats = ["Office", "Commercial", "Residential"];
+            
+            cats.forEach(cat => {
+                const filtered = data.filter(p => p["Category (분류)"] === cat && p["Is_Main_Display (메인노출)"] === "TRUE");
+                const limited = filtered.slice(0, 3); // 카테고리별 3개 제한
+
+                let sectionHTML = `
+                    <div class="portfolio-section">
+                        <div class="section-header">
+                            <h2 class="section-title">${cat}</h2>
+                            <button class="btn" onclick="location.href='list.html?category=${cat}'">더보기</button>
+                        </div>
+                        <div class="grid">
+                            ${limited.map(p => `
+                                <div class="card" onclick="location.href='detail.html?id=${p["Project_ID"]}'">
+                                    <div class="card-img" style="background: url('${p["Main_Image (대표 이미지)"]}') center/cover;"></div>
+                                    <div class="card-title">${p["Project_Name (프로젝트명)"]}</div>
+                                    <div class="card-desc">${p["Location (위치)"]} · ${p["Area_Size (면적)"]}</div>
+                                </div>`).join('')}
+                        </div>
+                    </div>`;
+                container.innerHTML += sectionHTML;
+            });
+        });
+</script>
 
 <!-- ... (푸터 및 하단 스크립트 동일하게 유지) -->
 		<footer class="footer" id="contact">
