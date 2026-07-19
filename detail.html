@@ -1,0 +1,35 @@
+<!-- detail.html -->
+<div class="portfolio-section" style="max-width: 900px; margin: auto;">
+    <h1 id="d-title" style="margin-bottom: 10px;"></h1>
+    <p id="d-info" style="color: #666; margin-bottom: 30px;"></p>
+    
+    <!-- 메인 슬라이드 -->
+    <img id="main-view" src="" style="width:100%; border-radius:8px; margin-bottom:20px;">
+    
+    <!-- 서브 이미지 갤러리 -->
+    <div id="sub-gallery" style="display:flex; gap:10px; overflow-x:auto;"></div>
+    
+    <p id="d-desc" style="margin-top: 40px; line-height: 1.8;"></p>
+</div>
+
+<script>
+    const id = new URLSearchParams(window.location.search).get('id');
+    
+    fetch("https://script.google.com/macros/s/AKfycbw86csvjh83p32eBgHO3nSmrMBeTFbYoVX-AAfCinjE2xOD135YBCmToHSa5sWkC_pf/exec?sheet=Portfolio")
+        .then(res => res.json())
+        .then(data => {
+            const p = data.find(item => item["Project_ID"] === id);
+            document.getElementById("d-title").innerText = p["Project_Name (프로젝트명)"];
+            document.getElementById("d-info").innerText = `${p["Location (위치)"]} | ${p["Area_Size (면적)"]}`;
+            document.getElementById("d-desc").innerText = p["Full_Desc (상세 설명)"];
+            document.getElementById("main-view").src = p["Main_Image (대표 이미지)"];
+            
+            // 추가 이미지 나열
+            const gallery = document.getElementById("sub-gallery");
+            [p["Main_Image (대표 이미지)"], ...p["Sub Images"].split(",")].forEach(url => {
+                if(url.trim()) {
+                    gallery.innerHTML += `<img src="${url.trim()}" style="width:100px; height:100px; object-fit:cover; cursor:pointer;" onclick="document.getElementById('main-view').src=this.src">`;
+                }
+            });
+        });
+</script>
