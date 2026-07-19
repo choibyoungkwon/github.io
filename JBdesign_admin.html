@@ -66,6 +66,16 @@
 				</select>
 			</div>
 			<div class="form-group">
+				<!-- 기존 코드의 form 내부를 아래와 같이 라벨 ID만 추가해 줍니다 -->
+		    <!-- id="titleLabel" 추가 -->
+  				<label id="titleLabel">제목 (Title)</label>
+                <input type="text" id="title" placeholder="예: 공간의 본질에 기능과 가치를 더하다" required />
+            </div>
+            <div class="form-group">
+            <!-- id="descLabel" 추가 -->
+                <label id="descLabel">설명 (Description)</label>
+                <textarea id="desc" placeholder="세부 설명을 적어주세요."></textarea>
+            </div>
 				<label>제목 (Title)</label>
 				<input type="text" id="title" placeholder="예: 공간의 본질에 기능과 가치를 더하다" required />
 			</div>
@@ -86,7 +96,34 @@
 		const webAppUrl = "https://script.google.com/macros/s/AKfycbw86csvjh83p32eBgHO3nSmrMBeTFbYoVX-AAfCinjE2xOD135YBCmToHSa5sWkC_pf/exec";
 		const form = document.getElementById("uploadForm");
 		const btn = document.getElementById("submitBtn");
+        const webAppUrl = "https://script.google.com/macros/s/.../exec";
+        const sectionSelect = document.getElementById("section");
+		const titleLabel = document.getElementById("titleLabel");
+		const titleInput = document.getElementById("title");
+		const descLabel = document.getElementById("descLabel");
+		const descInput = document.getElementById("desc");
 
+// 💡 카테고리 선택 변경 시 입력창 레이블과 플레이스홀더를 동적으로 바꾸는 이벤트 리스너
+		sectionSelect.addEventListener("change", function() {
+    	const selectedValue = this.value;
+
+    // 선택한 카테고리에 '포트폴리오'라는 단어가 포함되어 있다면
+    		if (selectedValue.includes("포트폴리오")) {
+        		titleLabel.innerText = "프로젝트명 / 공간 이름 (Project Name)";
+        		titleInput.placeholder = "예: Thu Thiem GSA 전시회 인테리어 공사";
+        
+        		descLabel.innerText = "디자인 콘셉트 및 상세 설명 (Design Concept)";
+        		descInput.placeholder = "공간의 디자인 의도, 사용된 주요 마감재, 현장 시공 특징 등을 상세히 적어주세요.";
+   				} 
+    // 메인 배경화면이나 배너일 경우 기본 텍스트로 복원
+   			 else {
+        		titleLabel.innerText = "제목 (Title)";
+        		titleInput.placeholder = "예: 공간의 본질에 기능과 가치를 더하다";
+        
+        		descLabel.innerText = "설명 (Description)";
+        		descInput.placeholder = "세부 설명을 적어주세요.";
+    			}
+		});
 		function setBtnState(text, disabled) {
 			btn.innerText = text;
 			btn.disabled = disabled;
