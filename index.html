@@ -392,47 +392,57 @@
 				<p>효율적인 동선 및 3D 렌더링 컨설팅</p>
 			</div>
 		</div>
+<!-- ... (상단 디자인 코드 동일하게 유지) -->
 
 		<div class="portfolio-section" id="portfolio">
 			<div class="section-header">
 				<h2 class="section-title">Explore Our Projects</h2>
 				<div class="tabs">
-					<button class="active">All</button>
-					<button>Office</button>
-					<button>Commercial</button>
-					<button>Residential</button>
+					<button class="active" onclick="filterProjects('All')">All</button>
+					<button onclick="filterProjects('Office')">Office</button>
+					<button onclick="filterProjects('Commercial')">Commercial</button>
+					<button onclick="filterProjects('Residential')">Residential</button>
 				</div>
 			</div>
 
-			<div class="grid">
-				<div class="card">
-					<div class="card-img" style="background: url('사진경로1_오피스.jpg') center/cover; background-color: #ddd;"></div>
-					<div class="card-title">Pearl Tower 16F 워크스페이스</div>
-					<div class="card-desc">
-						Ho Chi Minh City · 175㎡ 레이아웃 및 EI60 방화 도어 적용 오피스 핏아웃
-					</div>
-				</div>
-
-				<div class="card">
-					<div class="card-img" style="background: url('사진경로2_오피스.jpg') center/cover; background-color: #ccc;"></div>
-					<div class="card-title">WJ Food 베트남 법인 오피스</div>
-					<div class="card-desc">네트워크 인프라 구축 및 기업 맞춤형 스마트 오피스 시공</div>
-				</div>
-
-				<div class="card">
-					<div class="card-img" style="background: url('사진경로3_레지던스.jpg') center/cover; background-color: #eee;"></div>
-					<div class="card-title">Lumière Midtown 레지던스</div>
-					<div class="card-desc">프리미엄 주거 공간 리노베이션 및 맞춤형 가구 제작</div>
-				</div>
-
-				<div class="card">
-					<div class="card-img" style="background: url('사진경로4_오피스.jpg') center/cover; background-color: #d5d5d5;"></div>
-					<div class="card-title">하노이 77㎡ 콤팩트 오피스</div>
-					<div class="card-desc">Hanoi · 공간 효율을 극대화한 임원실 및 팬트리 맞춤 설계</div>
-				</div>
+			<div class="grid" id="portfolio-grid">
+                <!-- 여기에 데이터가 동적으로 들어갑니다 -->
+                <p>Loading projects...</p>
 			</div>
 		</div>
 
+        <script>
+            const webAppUrl = "https://script.google.com/macros/s/AKfycbw86csvjh83p32eBgHO3nSmrMBeTFbYoVX-AAfCinjE2xOD135YBCmToHSa5sWkC_pf/exec?sheet=Portfolio";
+            let allData = [];
+
+            fetch(webAppUrl)
+                .then(res => res.json())
+                .then(data => {
+                    allData = data;
+                    filterProjects('All');
+                });
+
+            function filterProjects(cat) {
+                const grid = document.getElementById("portfolio-grid");
+                grid.innerHTML = "";
+                const filtered = (cat === 'All') ? allData : allData.filter(p => p["Category (분류)"] === cat);
+                
+                filtered.forEach(p => {
+                    if (p["Is_Main_Display (메인노출)"] === true || p["Is_Main_Display (메인노출)"] === "TRUE") {
+                        grid.innerHTML += `
+                            <div class="card" onclick="location.href='detail.html?id=${p["Project_ID"]}'">
+                                <div class="card-img" style="background: url('${p["Main_Image (대표 이미지)"]}') center/cover; background-color: #ddd;"></div>
+                                <div class="card-title">${p["Project_Name (프로젝트명)"]}</div>
+                                <div class="card-desc">
+                                    ${p["Location (위치)"]} · ${p["Area_Size (면적)"]} <br> ${p["Short_Desc (요약 설명)"]}
+                                </div>
+                            </div>`;
+                    }
+                });
+            }
+        </script>
+
+<!-- ... (푸터 및 하단 스크립트 동일하게 유지) -->
 		<footer class="footer" id="contact">
 			<div class="footer-cols">
 				<div class="footer-col">
