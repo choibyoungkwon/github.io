@@ -12,22 +12,15 @@
 		label { display: block; font-weight: bold; margin-bottom: 8px; font-size: 14px; }
 		select, input[type="text"], input[type="date"], textarea, input[type="file"] { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: inherit; }
 		textarea { height: 100px; resize: vertical; }
-		
-        /* 동적으로 나타나는 포트폴리오 전용 영역 스타일 */
-        #portfolioFields {
-            display: none; /* 기본은 숨김 상태 */
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 6px;
-            border: 1px solid #e9ecef;
-            margin-bottom: 20px;
-        }
+        
+        #portfolioFields, #subFilesGroup { display: none; background: #f8f9fa; padding: 20px; border-radius: 6px; border: 1px solid #e9ecef; margin-bottom: 20px; }
         #portfolioFields h4 { margin-top: 0; margin-bottom: 15px; color: #333; font-size: 15px; border-bottom: 1px dashed #ccc; padding-bottom: 8px; }
 
 		.btn-submit { width: 100%; padding: 15px; background: #111; color: #fff; font-size: 16px; font-weight: bold; border: none; cursor: pointer; border-radius: 4px; transition: background 0.3s; }
 		.btn-submit:hover:not(:disabled) { background: #333; }
 		.btn-submit:disabled { background: #aaa; cursor: not-allowed; }
 		.helper { font-size: 12px; color: #666; margin-top: 6px; }
+        .accent { color: #d9534f; font-weight: normal; }
 	</style>
 </head>
 <body>
@@ -50,12 +43,11 @@
 				<input type="text" id="title" placeholder="예: 공간의 본질에 기능과 가치를 더하다" required />
 			</div>
 
-            <!-- 새로 추가된 포트폴리오 전용 입력 그룹 (숨김 처리됨) -->
             <div id="portfolioFields">
-                <h4>포트폴리오 상세 정보</h4>
+                <h4>포트폴리오 상세 정보 <span class="helper">(없는 값은 비워두고 추후 시트에서 수정 가능)</span></h4>
                 <div class="form-group">
                     <label>현장 위치 (Location)</label>
-                    <input type="text" id="location" placeholder="예: Ho Chi Minh City, Hanoi 등" />
+                    <input type="text" id="location" placeholder="예: Thao Dien, Sai Gon" />
                 </div>
                 <div class="form-group">
                     <label>공사 면적 (Area Size)</label>
@@ -63,7 +55,7 @@
                 </div>
                 <div class="form-group">
                     <label>요약 설명 (Short Description)</label>
-                    <input type="text" id="shortDesc" placeholder="예: 175㎡ 레이아웃 및 방화 도어 적용 핏아웃" />
+                    <input type="text" id="shortDesc" placeholder="예: Korean BBQ & Hot Pot 인테리어" />
                 </div>
                 <div class="form-group" style="margin-bottom: 0;">
                     <label>완공일 (Completion Date)</label>
@@ -75,11 +67,20 @@
 				<label id="descLabel">설명 (Description)</label>
 				<textarea id="desc" placeholder="세부 설명을 적어주세요."></textarea>
 			</div>
-			<div class="form-group">
-				<label>사진 파일 첨부</label>
+			
+            <div class="form-group">
+				<label>대표 사진 첨부 <span class="accent">(목록에 보일 메인 사진 1장)</span></label>
 				<input type="file" id="file" accept="image/*" required />
 				<p class="helper">권장: 5MB 이하 이미지 (jpg, png, webp)</p>
 			</div>
+
+            <!-- 새로 추가된 다중 사진 업로드 영역 -->
+            <div id="subFilesGroup">
+                <label>추가 사진들 첨부 <span class="accent">(상세 갤러리용 - 여러 장 드래그 선택 가능)</span></label>
+                <input type="file" id="subFiles" accept="image/*" multiple />
+                <p class="helper">상세 페이지에서 작은 썸네일로 나열되며 클릭 시 확대되는 사진들입니다. (최대 5~10장 권장)</p>
+            </div>
+
 			<button type="submit" class="btn-submit" id="submitBtn">구글 드라이브에 업로드 및 데이터 저장</button>
 		</form>
 	</div>
@@ -96,24 +97,27 @@
 		const titleInput = document.getElementById("title");
 		const descLabel = document.getElementById("descLabel");
 		const descInput = document.getElementById("desc");
+        
         const portfolioFields = document.getElementById("portfolioFields");
+        const subFilesGroup = document.getElementById("subFilesGroup");
 
-		// 카테고리 변경 시 물리적인 폼 영역을 보여주거나 숨기는 로직
 		sectionSelect.addEventListener("change", function() {
 			const selectedValue = this.value;
 
 			if (selectedValue.includes("포트폴리오")) {
-                portfolioFields.style.display = "block"; // 숨겨진 칸 나타남
+                portfolioFields.style.display = "block";
+                subFilesGroup.style.display = "block"; // 다중 업로드 칸 보이기
 				titleLabel.innerText = "프로젝트명 / 공간 이름 (Project Name)";
-				titleInput.placeholder = "예: Thu Thiem GSA 전시회 인테리어 공사";
+				titleInput.placeholder = "예: Masteri T3 Apartment";
 				descLabel.innerText = "디자인 콘셉트 및 상세 설명 (Full Description)";
-				descInput.placeholder = "공간의 디자인 의도, 사용된 주요 마감재, 현장 시공 특징 등을 상세히 적어주세요.";
+				descInput.placeholder = "공간의 디자인 의도, 사용된 주요 마감재 등을 적어주세요.";
 			} else {
-                portfolioFields.style.display = "none"; // 다시 숨김
+                portfolioFields.style.display = "none";
+                subFilesGroup.style.display = "none"; // 다중 업로드 칸 숨기기
 				titleLabel.innerText = "제목 (Title)";
-				titleInput.placeholder = "예: 공간의 본질에 기능과 가치를 더하다";
+				titleInput.placeholder = "예: We Create Better Life !!!";
 				descLabel.innerText = "설명 (Description)";
-				descInput.placeholder = "세부 설명을 적어주세요.";
+				descInput.placeholder = "메인 배너에 들어갈 세부 설명을 적어주세요.";
 			}
 		});
 
@@ -125,7 +129,11 @@
 		function fileToBase64(file) {
 			return new Promise((resolve, reject) => {
 				const reader = new FileReader();
-				reader.onload = (e) => resolve(e.target.result.split(",")[1]);
+				reader.onload = (e) => resolve({
+                    name: file.name,
+                    mime: file.type,
+                    data: e.target.result.split(",")[1]
+                });
 				reader.onerror = reject;
 				reader.readAsDataURL(file);
 			});
@@ -134,59 +142,55 @@
 		form.addEventListener("submit", async (e) => {
 			e.preventDefault();
 
-			if (!form.checkValidity()) {
-				alert("모든 항목을 입력하고 사진을 첨부해 주세요.");
-				return;
-			}
+			const mainFile = document.getElementById("file").files[0];
+			if (!mainFile) return alert("대표 사진 파일을 첨부해 주세요.");
 
-			const file = document.getElementById("file").files[0];
-			if (!file) { return; }
-			if (file.size > 5 * 1024 * 1024) {
-				alert("파일 용량이 너무 큽니다. 5MB 이하 파일을 업로드해 주세요.");
-				return;
-			}
-
-			setBtnState("업로드 중... (창을 닫지 마세요)", true);
+			setBtnState("여러 장의 사진을 처리 중입니다... (창을 닫지 마세요)", true);
 
 			try {
-				const base64Data = await fileToBase64(file);
 				const formData = new FormData();
-				
 				formData.append("section", sectionSelect.value);
 				formData.append("title", titleInput.value.trim());
 				formData.append("desc", descInput.value.trim());
-				formData.append("fileData", base64Data);
-				formData.append("fileName", file.name);
-				formData.append("mimeType", file.type);
+                
+                // 1. 대표 사진 변환
+                const mainBase64 = await fileToBase64(mainFile);
+				formData.append("fileData", mainBase64.data);
+				formData.append("fileName", mainBase64.name);
+				formData.append("mimeType", mainBase64.mime);
 
-                // 포트폴리오일 경우 추가 항목들도 서버로 전송
+                // 2. 포트폴리오 추가 데이터 및 다중 사진 처리
                 if (sectionSelect.value.includes("포트폴리오")) {
                     formData.append("location", document.getElementById("location").value.trim());
                     formData.append("areaSize", document.getElementById("areaSize").value.trim());
                     formData.append("shortDesc", document.getElementById("shortDesc").value.trim());
                     formData.append("completionDate", document.getElementById("completionDate").value);
+
+                    const subFiles = document.getElementById("subFiles").files;
+                    if (subFiles.length > 0) {
+                        const subFilesArray = [];
+                        for (let i = 0; i < subFiles.length; i++) {
+                            const subBase64 = await fileToBase64(subFiles[i]);
+                            subFilesArray.push(subBase64);
+                        }
+                        // 배열을 JSON 문자열로 묶어서 서버로 전송
+                        formData.append("subFilesData", JSON.stringify(subFilesArray));
+                    }
                 }
 
 				const response = await fetch(webAppUrl, { method: "POST", body: formData });
 
-				if (!response.ok) {
-					const raw = await response.text();
-					throw new Error(`HTTP ${response.status}: ${raw}`);
-				}
+				if (!response.ok) throw new Error(`HTTP ${response.status}`);
+				const result = await response.json().catch(() => ({ success: true }));
+				if (result.success === false) throw new Error("서버 처리 실패");
 
-				const raw = await response.text();
-				let result;
-				try { result = raw ? JSON.parse(raw) : {}; } catch { result = { success: true }; }
-
-				if (result.success === false) throw new Error(result.message || "서버 처리 실패");
-
-				alert("성공적으로 업로드되었습니다!");
+				alert("모든 사진과 데이터가 성공적으로 저장되었습니다!");
 				form.reset();
 				sectionSelect.dispatchEvent(new Event("change"));
 
 			} catch (err) {
 				console.error("업로드 오류:", err);
-				alert("오류가 발생했습니다. 네트워크 상태나 스크립트 권한을 확인해 주세요.");
+				alert("업로드 중 오류가 발생했습니다. 사진 용량이 너무 크면 줄여서 시도해 주세요.");
 			} finally {
 				setBtnState("구글 드라이브에 업로드 및 데이터 저장", false);
 			}
