@@ -1,0 +1,22 @@
+<div class="portfolio-section">
+    <h2 class="section-title" id="list-title"></h2>
+    <div class="grid" id="portfolio-list" style="grid-template-columns: repeat(3, 1fr);"></div>
+</div>
+
+<script>
+    const cat = new URLSearchParams(window.location.search).get('category');
+    document.getElementById('list-title').innerText = cat;
+
+    fetch("https://script.google.com/macros/s/AKfycbw86csvjh83p32eBgHO3nSmrMBeTFbYoVX-AAfCinjE2xOD135YBCmToHSa5sWkC_pf/exec?sheet=Portfolio")
+        .then(res => res.json())
+        .then(data => {
+            const list = document.getElementById("portfolio-list");
+            data.filter(p => p["Category (분류)"] === cat).forEach(p => {
+                list.innerHTML += `
+                    <div class="card" onclick="location.href='detail.html?id=${p["Project_ID"]}'">
+                        <img src="${p["Main_Image (대표 이미지)"]}" class="card-img">
+                        <div class="card-title">${p["Project_Name (프로젝트명)"]}</div>
+                    </div>`;
+            });
+        });
+</script>
