@@ -5,48 +5,26 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>JB Design | 홈페이지 관리자</title>
 	<style>
-		body {
-			font-family: 'Noto Sans KR', sans-serif;
-			background: #f4f4f4;
-			padding: 50px;
-		}
-		.admin-container {
-			max-width: 600px;
-			background: #fff;
-			padding: 40px;
-			border-radius: 8px;
-			margin: 0 auto;
-			box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-		}
-		h2 {
-			margin-top: 0;
-			color: #111;
-			border-bottom: 2px solid #111;
-			padding-bottom: 15px;
-		}
+		body { font-family: 'Noto Sans KR', sans-serif; background: #f4f4f4; padding: 50px; }
+		.admin-container { max-width: 600px; background: #fff; padding: 40px; border-radius: 8px; margin: 0 auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+		h2 { margin-top: 0; color: #111; border-bottom: 2px solid #111; padding-bottom: 15px; }
 		.form-group { margin-bottom: 20px; }
 		label { display: block; font-weight: bold; margin-bottom: 8px; font-size: 14px; }
-		select, input[type="text"], textarea, input[type="file"] {
-			width: 100%;
-			padding: 12px;
-			border: 1px solid #ccc;
-			border-radius: 4px;
-			box-sizing: border-box;
-			font-family: inherit;
-		}
+		select, input[type="text"], input[type="date"], textarea, input[type="file"] { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: inherit; }
 		textarea { height: 100px; resize: vertical; }
-		.btn-submit {
-			width: 100%;
-			padding: 15px;
-			background: #111;
-			color: #fff;
-			font-size: 16px;
-			font-weight: bold;
-			border: none;
-			cursor: pointer;
-			border-radius: 4px;
-			transition: background 0.3s;
-		}
+		
+        /* 동적으로 나타나는 포트폴리오 전용 영역 스타일 */
+        #portfolioFields {
+            display: none; /* 기본은 숨김 상태 */
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+            margin-bottom: 20px;
+        }
+        #portfolioFields h4 { margin-top: 0; margin-bottom: 15px; color: #333; font-size: 15px; border-bottom: 1px dashed #ccc; padding-bottom: 8px; }
+
+		.btn-submit { width: 100%; padding: 15px; background: #111; color: #fff; font-size: 16px; font-weight: bold; border: none; cursor: pointer; border-radius: 4px; transition: background 0.3s; }
 		.btn-submit:hover:not(:disabled) { background: #333; }
 		.btn-submit:disabled { background: #aaa; cursor: not-allowed; }
 		.helper { font-size: 12px; color: #666; margin-top: 6px; }
@@ -66,10 +44,33 @@
 					<option value="포트폴리오_레지던스">포트폴리오 - 레지던스</option>
 				</select>
 			</div>
+
 			<div class="form-group">
 				<label id="titleLabel">제목 (Title)</label>
 				<input type="text" id="title" placeholder="예: 공간의 본질에 기능과 가치를 더하다" required />
 			</div>
+
+            <!-- 새로 추가된 포트폴리오 전용 입력 그룹 (숨김 처리됨) -->
+            <div id="portfolioFields">
+                <h4>포트폴리오 상세 정보</h4>
+                <div class="form-group">
+                    <label>현장 위치 (Location)</label>
+                    <input type="text" id="location" placeholder="예: Ho Chi Minh City, Hanoi 등" />
+                </div>
+                <div class="form-group">
+                    <label>공사 면적 (Area Size)</label>
+                    <input type="text" id="areaSize" placeholder="예: 175㎡" />
+                </div>
+                <div class="form-group">
+                    <label>요약 설명 (Short Description)</label>
+                    <input type="text" id="shortDesc" placeholder="예: 175㎡ 레이아웃 및 방화 도어 적용 핏아웃" />
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label>완공일 (Completion Date)</label>
+                    <input type="date" id="completionDate" />
+                </div>
+            </div>
+
 			<div class="form-group">
 				<label id="descLabel">설명 (Description)</label>
 				<textarea id="desc" placeholder="세부 설명을 적어주세요."></textarea>
@@ -84,29 +85,31 @@
 	</div>
 
 	<script>
-		// 정확한 최신 웹앱 URL
+		// 최신 웹앱 URL
 		const webAppUrl = "https://script.google.com/macros/s/AKfycbw86csvjh83p32eBgHO3nSmrMBeTFbYoVX-AAfCinjE2xOD135YBCmToHSa5sWkC_pf/exec";
 		
 		const form = document.getElementById("uploadForm");
 		const btn = document.getElementById("submitBtn");
 
-		// 화면 전환(텍스트 변경)을 위한 변수 선언
 		const sectionSelect = document.getElementById("section");
 		const titleLabel = document.getElementById("titleLabel");
 		const titleInput = document.getElementById("title");
 		const descLabel = document.getElementById("descLabel");
 		const descInput = document.getElementById("desc");
+        const portfolioFields = document.getElementById("portfolioFields");
 
-		// 카테고리 변경 시 실행되는 이벤트 로직
+		// 카테고리 변경 시 물리적인 폼 영역을 보여주거나 숨기는 로직
 		sectionSelect.addEventListener("change", function() {
 			const selectedValue = this.value;
 
 			if (selectedValue.includes("포트폴리오")) {
+                portfolioFields.style.display = "block"; // 숨겨진 칸 나타남
 				titleLabel.innerText = "프로젝트명 / 공간 이름 (Project Name)";
 				titleInput.placeholder = "예: Thu Thiem GSA 전시회 인테리어 공사";
-				descLabel.innerText = "디자인 콘셉트 및 상세 설명 (Design Concept)";
+				descLabel.innerText = "디자인 콘셉트 및 상세 설명 (Full Description)";
 				descInput.placeholder = "공간의 디자인 의도, 사용된 주요 마감재, 현장 시공 특징 등을 상세히 적어주세요.";
 			} else {
+                portfolioFields.style.display = "none"; // 다시 숨김
 				titleLabel.innerText = "제목 (Title)";
 				titleInput.placeholder = "예: 공간의 본질에 기능과 가치를 더하다";
 				descLabel.innerText = "설명 (Description)";
@@ -137,10 +140,7 @@
 			}
 
 			const file = document.getElementById("file").files[0];
-			if (!file) {
-				alert("사진 파일을 첨부해 주세요.");
-				return;
-			}
+			if (!file) { return; }
 			if (file.size > 5 * 1024 * 1024) {
 				alert("파일 용량이 너무 큽니다. 5MB 이하 파일을 업로드해 주세요.");
 				return;
@@ -152,13 +152,20 @@
 				const base64Data = await fileToBase64(file);
 				const formData = new FormData();
 				
-				// 입력된 데이터 취합
 				formData.append("section", sectionSelect.value);
 				formData.append("title", titleInput.value.trim());
 				formData.append("desc", descInput.value.trim());
 				formData.append("fileData", base64Data);
 				formData.append("fileName", file.name);
 				formData.append("mimeType", file.type);
+
+                // 포트폴리오일 경우 추가 항목들도 서버로 전송
+                if (sectionSelect.value.includes("포트폴리오")) {
+                    formData.append("location", document.getElementById("location").value.trim());
+                    formData.append("areaSize", document.getElementById("areaSize").value.trim());
+                    formData.append("shortDesc", document.getElementById("shortDesc").value.trim());
+                    formData.append("completionDate", document.getElementById("completionDate").value);
+                }
 
 				const response = await fetch(webAppUrl, { method: "POST", body: formData });
 
@@ -169,18 +176,11 @@
 
 				const raw = await response.text();
 				let result;
-				try {
-					result = raw ? JSON.parse(raw) : {};
-				} catch {
-					result = { success: true };
-				}
+				try { result = raw ? JSON.parse(raw) : {}; } catch { result = { success: true }; }
 
-				if (result.success === false) {
-					throw new Error(result.message || "서버 처리 실패");
-				}
+				if (result.success === false) throw new Error(result.message || "서버 처리 실패");
 
-				// 성공 알림 및 폼 초기화
-				alert("성공적으로 업로드되었습니다!\n" + (result.message || ""));
+				alert("성공적으로 업로드되었습니다!");
 				form.reset();
 				sectionSelect.dispatchEvent(new Event("change"));
 
