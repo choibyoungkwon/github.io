@@ -1,0 +1,103 @@
+<div class="gallery-wrapper">
+  <!-- 메인 큰 이미지 -->
+  <div class="main-image-container">
+    <img id="main-image" src="https://via.placeholder.com/600x400?text=Image+1" alt="Main Image">
+  </div>
+
+  <!-- 하단 섬네일 리스트 -->
+  <div class="thumbnail-container">
+    <!-- onclick 이벤트로 JS 함수를 호출합니다 -->
+    <img class="thumb" src="https://via.placeholder.com/600x400?text=Image+1" onclick="changeImage(this.src)">
+    <img class="thumb" src="https://via.placeholder.com/600x400?text=Image+2" onclick="changeImage(this.src)">
+    <img class="thumb" src="https://via.placeholder.com/600x400?text=Image+3" onclick="changeImage(this.src)">
+    <img class="thumb" src="https://via.placeholder.com/600x400?text=Image+4" onclick="changeImage(this.src)">
+  </div>
+</div>
+body {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  font-family: sans-serif;
+}
+
+.gallery-wrapper {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+#main-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: opacity 0.3s ease;
+}
+
+.thumbnail-container {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto; /* 이미지가 많으면 가로 스크롤 생성 */
+  padding-bottom: 5px;
+}
+
+.thumb {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+}
+
+.thumb:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+body {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  font-family: sans-serif;
+}
+
+.gallery-wrapper {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+#main-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: opacity 0.3s ease;
+}
+
+.thumbnail-container {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto; /* 이미지가 많으면 가로 스크롤 생성 */
+  padding-bottom: 5px;
+}
+
+.thumb {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+}
+
+.thumb:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+}
