@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none" role="img" aria-label="JB Design">
+  <!-- 지붕 -->
+  <path d="M5 33 L30 6 L55 33" stroke="#1B2A3A" stroke-width="4.5" stroke-linecap="square" stroke-linejoin="miter"/>
+  <!-- 수직 기둥들 -->
+  <path d="M13 26 V54" stroke="#1B2A3A" stroke-width="3.4" stroke-linecap="square"/>
+  <path d="M23 35 V58" stroke="#1B2A3A" stroke-width="3.4" stroke-linecap="square"/>
+  <path d="M33 2 V58" stroke="#1B2A3A" stroke-width="3.4" stroke-linecap="square"/>
+  <path d="M45 30 V50" stroke="#1B2A3A" stroke-width="3.4" stroke-linecap="square"/>
+</svg>

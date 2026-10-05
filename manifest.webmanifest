@@ -1,0 +1,22 @@
+{
+  "name": "JB Design | 인테리어·시공",
+  "short_name": "JB Design",
+  "description": "JB Design — 호치민·하노이의 상업·오피스·주거 공간 인테리어·시공 (기획부터 시공까지)",
+  "lang": "ko",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1B2A3A",
+  "theme_color": "#1B2A3A",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "프로젝트", "url": "/projects" },
+    { "name": "서비스", "url": "/services" },
+    { "name": "문의", "url": "/order" }
+  ]
+}

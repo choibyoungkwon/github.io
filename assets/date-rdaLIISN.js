@@ -1,0 +1,1 @@
+function r(e){const t=String(e??"").trim();if(!t)return"";if(/^\d{4}-\d{2}-\d{2}$/.test(t))return t;const n=new Date(t);return Number.isNaN(n.getTime())?t.slice(0,10):new Date(n.getTime()+7*3600*1e3).toISOString().slice(0,10)}function i(e,t=12){const n=String(e??"");return n.length>t?n.slice(0,t):n}export{i as s,r as v};

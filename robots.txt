@@ -1,0 +1,10 @@
+# JB Design — 자동 생성(scripts/gen-seo.mjs). 도메인 변경 시 VITE_SITE_URL 만 바꾸면 됩니다.
+User-agent: *
+Allow: /
+Disallow: /erp
+Disallow: /admin
+Disallow: /portal
+Disallow: /staff
+Disallow: /login
+
+Sitemap: https://jbdesignvn.com/sitemap.xml
